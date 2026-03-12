@@ -1,0 +1,209 @@
+---
+import Header from './Header.astro';
+
+const slides = [
+	{
+		titleEs: 'Servicios FBS',
+		titleEn: 'FBS Services',
+		itemsEs: [
+			'Planificación estratégica y asesoría corporativa',
+			'Manejo de Litigios',
+			'Ingeniería y Consultoría Legal',
+		],
+		itemsEn: ['Strategic planning and corporate advisory', 'Litigation management', 'Engineering and legal consulting'],
+		buttonLabelEs: 'Contáctenos',
+		buttonLabelEn: 'Contact us',
+		image:
+			'https://images.pexels.com/photos/323705/pexels-photo-323705.jpeg?auto=compress&cs=tinysrgb&w=1600',
+	},
+	{
+		titleEs: 'Asesoría Integral',
+		titleEn: 'Comprehensive Advisory',
+		itemsEs: [
+			'Diagnóstico legal de su empresa',
+			'Estrategias de prevención de riesgos',
+			'Acompañamiento en negociaciones clave',
+		],
+		itemsEn: ['Legal assessment of your company', 'Risk prevention strategies', 'Support in key negotiations'],
+		buttonLabelEs: 'Agendar consulta',
+		buttonLabelEn: 'Schedule a consultation',
+		image:
+			'https://images.pexels.com/photos/269077/pexels-photo-269077.jpeg?auto=compress&cs=tinysrgb&w=1600',
+	},
+	{
+		titleEs: 'Compromiso con la excelencia',
+		titleEn: 'Committed to excellence',
+		itemsEs: ['Equipo multidisciplinario', 'Atención personalizada', 'Enfoque en resultados'],
+		itemsEn: ['Multidisciplinary team', 'Personalized attention', 'Results-focused approach'],
+		buttonLabelEs: 'Ver servicios',
+		buttonLabelEn: 'View services',
+		image:
+			'https://images.pexels.com/photos/313782/pexels-photo-313782.jpeg?auto=compress&cs=tinysrgb&w=1600',
+	},
+];
+---
+
+<section class="relative min-h-screen bg-slate-900 text-white overflow-hidden">
+	<div
+		class="pointer-events-none absolute inset-0 bg-slate-950 bg-[radial-gradient(circle_at_top,_#1e293b,_#020617_60%)] opacity-90"
+	></div>
+
+	<div
+		class="relative z-10 flex min-h-screen flex-col bg-[url('/textures/wood-dark.jpg')] bg-cover bg-center bg-fixed bg-blend-overlay bg-slate-950/70"
+		data-hero-slider
+	>
+		<Header />
+
+		<!-- Slider -->
+		<div class="relative flex w-full flex-1 pb-16 lg:pb-20">
+			<div class="relative w-full py-10 sm:py-0 overflow-hidden">
+				{slides.map((slide, index) => (
+					<article
+						class={`absolute inset-0 flex flex-col justify-center rounded-none border-y border-slate-800/60 bg-slate-900/70 px-0 py-0 shadow-[0_35px_60px_-25px_rgba(15,23,42,1)] transition-opacity duration-700 ease-out overflow-hidden ${
+							index === 0 ? 'opacity-100' : 'opacity-0'
+						}`}
+						data-slide
+						data-index={index}
+						aria-hidden={index === 0 ? 'false' : 'true'}
+					>
+						<div
+							class="absolute inset-0 bg-cover bg-center"
+							style={{ backgroundImage: `url(${slide.image})` }}
+						></div>
+						<div class="absolute inset-0 bg-black/65"></div>
+
+						<div class="relative  mx-auto w-full max-w-6xl z-10 px-6 py-10 my-10 ">
+							<p class="text-xs font-semibold uppercase tracking-[0.3em] text-sky-300/95">
+								FBS Legal Services
+							</p>
+							<h1 class="mt-4 text-3xl font-semibold tracking-[0.16em] text-slate-50 sm:text-4xl">
+								<span class="lang-es">{slide.titleEs}</span>
+								<span class="lang-en">{slide.titleEn}</span>
+							</h1>
+
+							<ul class="mt-6 space-y-2 text-sm text-slate-100 sm:text-base">
+								{slide.itemsEs.map((itemEs, index) => (
+									<li class="flex items-start gap-2">
+										<span class="mt-1 h-1.5 w-1.5 rounded-full bg-sky-400"></span>
+										<span class="lang-es">{itemEs}</span>
+										<span class="lang-en">{slide.itemsEn[index]}</span>
+									</li>
+								))}
+							</ul>
+
+							<div class="mt-8">
+								<a
+									href="#contacto"
+									class="inline-flex items-center rounded-full bg-sky-500 px-6 py-2.5 text-xs font-semibold uppercase tracking-[0.2em] text-slate-950 shadow-lg shadow-sky-500/40 transition hover:bg-sky-400"
+								>
+									<span class="lang-es">{slide.buttonLabelEs}</span>
+									<span class="lang-en">{slide.buttonLabelEn}</span>
+								</a>
+							</div>
+						</div>
+					</article>
+				))}
+
+				<div class="pb-[60%] sm:pb-[48%] lg:pb-[42%]"></div>
+				<div
+					class="pointer-events-none absolute inset-x-0 bottom-10 z-10 flex justify-center gap-2 lg:bottom-12"
+					aria-hidden="true"
+					data-dots
+				>
+					{slides.map((_, index) => (
+						<button
+							type="button"
+							class=
+							{`pointer-events-auto cursor-pointer h-2.5 w-2.5 rounded-full border border-slate-400/80 bg-slate-200 transition hover:bg-slate-300/90 ${
+								index === 0 ? 'bg-sky-400 border-sky-400 w-8' : 'hover:bg-slate-600'
+							}`}
+							data-dot
+							data-index={index}
+						></button>
+					))}
+				</div>
+
+				<!-- Arrows over the slider -->
+				<button
+					type="button"
+					class="group absolute left-4 cursor-pointer top-1/2 z-20 hidden -translate-y-1/2 items-center justify-center rounded-full border border-slate-600/70 bg-slate-900/70 p-2 text-slate-200 shadow-sm transition hover:border-sky-400 hover:text-white lg:flex"
+					data-prev
+					aria-label="Slide anterior"
+				>
+					<span class="-ml-0.5 text-lg">&#10094;</span>
+				</button>
+
+				<button
+					type="button"
+					class="group absolute right-4 cursor-pointer top-1/2 z-20 hidden -translate-y-1/2 items-center justify-center rounded-full border border-slate-600/70 bg-slate-900/70 p-2 text-slate-200 shadow-sm transition hover:border-sky-400 hover:text-white lg:flex"
+					data-next
+					aria-label="Slide siguiente"
+				>
+					<span class="-mr-0.5 text-lg">&#10095;</span>
+				</button>
+			</div>
+		</div>
+	</div>
+
+	<script type="module">
+		document.addEventListener('DOMContentLoaded', () => {
+			const root = document.querySelector('[data-hero-slider]');
+			if (!root) return;
+
+			const slides = Array.from(root.querySelectorAll('[data-slide]'));
+			const prevBtn = root.querySelector('[data-prev]');
+			const nextBtn = root.querySelector('[data-next]');
+			const dots = Array.from(root.querySelectorAll('[data-dot]'));
+
+			let current = 0;
+
+			const setActive = (index) => {
+				slides.forEach((slide, i) => {
+					const isActive = i === index;
+					slide.style.opacity = isActive ? '1' : '0';
+					slide.setAttribute('aria-hidden', isActive ? 'false' : 'true');
+				});
+
+				dots.forEach((dot, i) => {
+					const isActive = i === index;
+					dot.classList.toggle('bg-sky-400', isActive);
+					dot.classList.toggle('border-sky-400', isActive);
+					dot.classList.toggle('w-8', isActive);
+				});
+
+				current = index;
+			};
+
+			const goNext = () => {
+				const nextIndex = (current + 1) % slides.length;
+				setActive(nextIndex);
+			};
+
+			const goPrev = () => {
+				const prevIndex = (current - 1 + slides.length) % slides.length;
+				setActive(prevIndex);
+			};
+
+			prevBtn?.addEventListener('click', goPrev);
+			nextBtn?.addEventListener('click', goNext);
+
+			dots.forEach((dot) => {
+				dot.addEventListener('click', () => {
+					const index = Number(dot.getAttribute('data-index') || '0');
+					setActive(index);
+				});
+			});
+
+			let auto = setInterval(goNext, 7000);
+
+			root.addEventListener('mouseenter', () => {
+				clearInterval(auto);
+			});
+
+			root.addEventListener('mouseleave', () => {
+				auto = setInterval(goNext, 7000);
+			});
+		});
+	</script>
+</section>
+

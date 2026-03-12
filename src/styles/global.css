@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+/* Language toggle helpers */
+html:not([data-lang]),
+html[data-lang='es'] {
+	.lang-en {
+		display: none;
+	}
+}
+
+html[data-lang='en'] {
+	.lang-es {
+		display: none;
+	}
+}

@@ -1,0 +1,205 @@
+---
+---
+
+<header class="relative z-20 w-full" data-site-header>
+	<div class="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4 lg:px-8 lg:py-6">
+		<div class="flex items-center gap-3">
+			<div
+				class="flex h-10 w-10 items-center justify-center rounded-sm bg-sky-500 text-sm font-semibold tracking-wide"
+			>
+				ALG
+			</div>
+			<div class="leading-tight">
+				<p class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-200">
+					<span class="lang-es">Alianza Law Group</span>
+					<span class="lang-en">Alianza Law Group</span>
+				</p>
+				<p class="text-xs text-slate-400">
+					<span class="lang-es">Abogados | Consultores</span>
+					<span class="lang-en">Attorneys | Consultants</span>
+				</p>
+			</div>
+		</div>
+
+		<nav class="hidden items-center gap-8 text-xs font-medium uppercase tracking-[0.18em] text-slate-200 md:flex">
+			<a href="#servicios" class="transition-colors hover:text-white">
+				<span class="lang-es">Servicios</span>
+				<span class="lang-en">Services</span>
+			</a>
+			<a href="#noticias" class="transition-colors hover:text-white">
+				<span class="lang-es">Noticias</span>
+				<span class="lang-en">News</span>
+			</a>
+			<a href="#manuales" class="transition-colors hover:text-white">
+				<span class="lang-es">Manuales</span>
+				<span class="lang-en">Guides</span>
+			</a>
+			<a href="#english" class="transition-colors hover:text-white" data-lang-toggle>
+				<span class="lang-es">English</span>
+				<span class="lang-en">Español</span>
+			</a>
+		</nav>
+
+		<div class="flex items-center gap-4">
+			<div class="hidden items-center gap-3 text-slate-300 md:flex">
+				<button
+					class="flex h-8 w-8 items-center justify-center rounded-full border border-slate-600/70 bg-slate-900/50 text-[10px] uppercase tracking-[0.18em] text-slate-200 shadow-sm transition hover:border-sky-400 hover:text-white"
+					aria-label="Instagram"
+				>
+					IG
+				</button>
+				<button
+					class="flex h-8 w-8 items-center justify-center rounded-full border border-slate-600/70 bg-slate-900/50 text-[10px] uppercase tracking-[0.18em] text-slate-200 shadow-sm transition hover:border-sky-400 hover:text-white"
+					aria-label="Facebook"
+				>
+					Fb
+				</button>
+			</div>
+
+			<a
+				href="#contacto"
+				class="hidden rounded-full bg-sky-500 px-5 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-950 shadow-lg shadow-sky-500/30 transition hover:bg-sky-400 sm:inline-flex"
+			>
+				<span class="lang-es">Contacto</span>
+				<span class="lang-en">Contact</span>
+			</a>
+
+			<!-- Botón hamburguesa mobile -->
+			<button
+				type="button"
+				class="inline-flex h-9 w-9 items-center justify-center rounded-md border border-slate-700/80 bg-slate-900/70 text-slate-100 shadow-sm transition hover:border-sky-400 hover:text-white md:hidden"
+				data-mobile-toggle
+				aria-label="Abrir menú"
+				aria-expanded="false"
+			>
+				<span class="relative block h-3.5 w-4">
+					<span
+						class="absolute inset-x-0 top-0 h-0.5 rounded bg-sky-400 transition-transform"
+						data-line="1"
+					></span>
+					<span
+						class="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 rounded bg-sky-400 transition-opacity"
+						data-line="2"
+					></span>
+					<span
+						class="absolute inset-x-0 bottom-0 h-0.5 rounded bg-sky-400 transition-transform"
+						data-line="3"
+					></span>
+				</span>
+			</button>
+		</div>
+	</div>
+
+	<!-- Menú mobile -->
+	<div
+		class="pointer-events-none absolute inset-x-0 top-full origin-top transform bg-slate-950/98 px-6 pb-5 pt-2 text-sm opacity-0 shadow-lg shadow-black/40 ring-1 ring-slate-800/80 backdrop-blur-md transition duration-200 md:hidden"
+		data-mobile-nav
+	>
+		<nav class="flex flex-col gap-2 text-xs font-medium uppercase tracking-[0.2em] text-slate-100">
+			<a href="#firma" class="py-1.5 transition-colors hover:text-sky-300">
+				<span class="lang-es">La Firma</span>
+				<span class="lang-en">The Firm</span>
+			</a>
+			<a href="#socio" class="py-1.5 transition-colors hover:text-sky-300">
+				<span class="lang-es">Socio Fundador</span>
+				<span class="lang-en">Founding Partner</span>
+			</a>
+			<a href="#servicios" class="py-1.5 transition-colors hover:text-sky-300">
+				<span class="lang-es">Servicios</span>
+				<span class="lang-en">Services</span>
+			</a>
+			<a href="#noticias" class="py-1.5 transition-colors hover:text-sky-300">
+				<span class="lang-es">Noticias</span>
+				<span class="lang-en">News</span>
+			</a>
+			<a href="#manuales" class="py-1.5 transition-colors hover:text-sky-300">
+				<span class="lang-es">Manuales</span>
+				<span class="lang-en">Guides</span>
+			</a>
+			<a href="#english" class="py-1.5 transition-colors hover:text-sky-300" data-lang-toggle>
+				<span class="lang-es">English</span>
+				<span class="lang-en">Español</span>
+			</a>
+		</nav>
+
+		<a
+			href="#contacto"
+			class="mt-4 inline-flex w-full items-center justify-center rounded-full bg-sky-500 px-5 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-slate-950 shadow-md shadow-sky-500/40 transition hover:bg-sky-400"
+		>
+			<span class="lang-es">Contacto</span>
+			<span class="lang-en">Contact</span>
+		</a>
+	</div>
+
+	<script type="module">
+		document.addEventListener('DOMContentLoaded', () => {
+			const header = document.querySelector('[data-site-header]');
+			if (!header) return;
+
+			const mobileToggle = header.querySelector('[data-mobile-toggle]');
+			const mobileNav = header.querySelector('[data-mobile-nav]');
+			const langToggles = header.querySelectorAll('[data-lang-toggle]');
+
+			if (!mobileToggle || !mobileNav) return;
+
+			const line1 = mobileToggle.querySelector('[data-line="1"]');
+			const line2 = mobileToggle.querySelector('[data-line="2"]');
+			const line3 = mobileToggle.querySelector('[data-line="3"]');
+
+			const setMenuState = (open) => {
+				mobileNav.style.opacity = open ? '1' : '0';
+				mobileNav.style.pointerEvents = open ? 'auto' : 'none';
+				mobileNav.style.transform = open ? 'scaleY(1)' : 'scaleY(0.9)';
+				mobileToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+
+				if (line1 && line3 && line2) {
+					line1.style.transform = open ? 'translateY(7px) rotate(45deg)' : 'translateY(0) rotate(0deg)';
+					line3.style.transform = open ? 'translateY(-7px) rotate(-45deg)' : 'translateY(0) rotate(0deg)';
+					line2.style.opacity = open ? '0' : '1';
+				}
+			};
+
+			let open = false;
+
+			mobileToggle.addEventListener('click', () => {
+				open = !open;
+				setMenuState(open);
+			});
+
+			// Cerrar al hacer click en un link
+			mobileNav.querySelectorAll('a').forEach((link) => {
+				link.addEventListener('click', () => {
+					open = false;
+					setMenuState(false);
+				});
+			});
+
+			// Language toggle
+			const applyLang = (lang) => {
+				document.documentElement.setAttribute('data-lang', lang);
+				try {
+					window.localStorage.setItem('siteLang', lang);
+				} catch {}
+			};
+
+			const stored = (() => {
+				try {
+					return window.localStorage.getItem('siteLang');
+				} catch {
+					return null;
+				}
+			})();
+
+			applyLang(stored === 'en' ? 'en' : 'es');
+
+			langToggles.forEach((el) => {
+				el.addEventListener('click', (event) => {
+					event.preventDefault();
+					const current = document.documentElement.getAttribute('data-lang') === 'en' ? 'en' : 'es';
+					const next = current === 'es' ? 'en' : 'es';
+					applyLang(next);
+				});
+			});
+		});
+	</script>
+
