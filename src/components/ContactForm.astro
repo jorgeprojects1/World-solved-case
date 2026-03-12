@@ -1,0 +1,142 @@
+---
+---
+
+<section
+	id="contacto"
+	class="relative bg-slate-950 py-16 text-slate-50 sm:py-20 lg:py-24"
+>
+	<div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-sky-500/0 via-sky-500/60 to-sky-500/0"></div>
+
+	<div class="mx-auto flex max-w-5xl flex-col gap-10 px-6 lg:flex-row lg:items-start lg:gap-16 lg:px-8">
+		<div class="w-full lg:w-[42%]">
+			<h2 class="text-2xl tracking-[0.2em] text-sky-400 sm:text-3xl">
+				<span class="lang-es">CONTÁCTANOS</span>
+				<span class="lang-en">CONTACT US</span>
+			</h2>
+			<div class="mt-3 h-0.5 w-20 bg-sky-500"></div>
+
+			<p class="mt-6 text-sm leading-relaxed text-slate-300 sm:text-base lang-es">
+				Inscríbete en este formulario con la información correspondiente y explícanos tu caso detalladamente en
+				el mensaje. Te responderemos lo más pronto posible.
+			</p>
+			<p class="mt-6 text-sm leading-relaxed text-slate-300 sm:text-base lang-en">
+				Fill out this form with your information and explain your case in detail in the message field. We will
+				get back to you as soon as possible.
+			</p>
+
+			<div class="mt-6 space-y-1 text-xs text-slate-400">
+				<p>
+					<span class="lang-es">También puedes escribirnos a</span>
+					<span class="lang-en">You can also write to</span>
+					<a href="mailto:info@worldsolvedcase.com" class="ml-1 text-sky-400 hover:text-sky-300"
+						>info@worldsolvedcase.com</a
+					>
+				</p>
+				<p>
+					<span class="lang-es">o llamarnos al</span>
+					<span class="lang-en">or call us at</span>
+					<a href="tel:+18096334040" class="ml-1 text-sky-400 hover:text-sky-300">+1 (809) 633-4040</a>
+				</p>
+			</div>
+		</div>
+
+		<div class="w-full lg:w-[58%]">
+			<form
+				class="rounded-xl border border-slate-800/80 bg-slate-900/70 p-6 shadow-xl shadow-slate-950/60 backdrop-blur-md sm:p-8"
+				name="contact"
+			>
+				<div class="grid gap-4 sm:grid-cols-2">
+					<div class="space-y-1.5">
+						<label for="nombre" class="block text-xs font-semibold uppercase tracking-[0.2em] text-slate-300"
+							><span class="lang-es">Nombre</span><span class="lang-en">First name</span></label
+						>
+						<input
+							id="nombre"
+							name="nombre"
+							type="text"
+							required
+							class="w-full rounded-md border border-slate-700/70 bg-slate-900/70 px-3 py-2 text-sm text-slate-50 outline-none ring-0 transition focus:border-sky-400 focus:ring-2 focus:ring-sky-500/40"
+						/>
+					</div>
+
+					<div class="space-y-1.5">
+						<label
+							for="apellido"
+							class="block text-xs font-semibold uppercase tracking-[0.2em] text-slate-300"
+							><span class="lang-es">Apellido</span><span class="lang-en">Last name</span></label
+						>
+						<input
+							id="apellido"
+							name="apellido"
+							type="text"
+							required
+							class="w-full rounded-md border border-slate-700/70 bg-slate-900/70 px-3 py-2 text-sm text-slate-50 outline-none ring-0 transition focus:border-sky-400 focus:ring-2 focus:ring-sky-500/40"
+						/>
+					</div>
+				</div>
+
+				<div class="mt-4 grid gap-4 sm:grid-cols-2">
+					<div class="space-y-1.5">
+						<label for="telefono" class="block text-xs font-semibold uppercase tracking-[0.2em] text-slate-300"
+							><span class="lang-es">Teléfono</span><span class="lang-en">Phone</span></label
+						>
+						<input
+							id="telefono"
+							name="telefono"
+							type="tel"
+							class="w-full rounded-md border border-slate-700/70 bg-slate-900/70 px-3 py-2 text-sm text-slate-50 outline-none ring-0 transition focus:border-sky-400 focus:ring-2 focus:ring-sky-500/40"
+						/>
+					</div>
+
+					<div class="space-y-1.5">
+						<label
+							for="email"
+							class="block text-xs font-semibold uppercase tracking-[0.2em] text-slate-300"
+							><span class="lang-es">Correo electrónico</span
+							><span class="lang-en">Email address</span></label
+						>
+						<input
+							id="email"
+							name="email"
+							type="email"
+							required
+							class="w-full rounded-md border border-slate-700/70 bg-slate-900/70 px-3 py-2 text-sm text-slate-50 outline-none ring-0 transition focus:border-sky-400 focus:ring-2 focus:ring-sky-500/40"
+						/>
+					</div>
+				</div>
+
+				<div class="mt-4 space-y-1.5">
+					<label
+						for="mensaje"
+						class="block text-xs font-semibold uppercase tracking-[0.2em] text-slate-300"
+						><span class="lang-es">Mensaje</span><span class="lang-en">Message</span></label
+					>
+					<textarea
+						id="mensaje"
+						name="mensaje"
+						required
+						rows={5}
+						class="w-full resize-none rounded-md border border-slate-700/70 bg-slate-900/70 px-3 py-2 text-sm text-slate-50 outline-none ring-0 transition focus:border-sky-400 focus:ring-2 focus:ring-sky-500/40"
+						placeholder="..."
+					></textarea>
+				</div>
+
+				<div class="mt-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+					<p class="text-[11px] text-slate-500">
+						<span class="lang-es">Al enviar aceptas nuestro trato responsable de tus datos.</span>
+						<span class="lang-en">By submitting, you agree to our responsible handling of your data.</span>
+					</p>
+
+					<button
+						type="submit"
+						class="inline-flex cursor-pointer items-center justify-center rounded-full bg-sky-500 px-7 py-2.5 text-xs font-semibold uppercase tracking-[0.22em] text-slate-950 shadow-lg shadow-sky-500/40 transition hover:bg-sky-400"
+					>
+						<span class="lang-es">Enviar mensaje</span>
+						<span class="lang-en">Send message</span>
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+
