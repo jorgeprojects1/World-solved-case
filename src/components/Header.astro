@@ -1,19 +1,30 @@
 ---
+
 ---
 
 <header
 	class="fixed inset-x-0 top-0 z-30 border-b border-slate-800/60 bg-slate-950/80 backdrop-blur-md"
 	data-site-header
 >
-	<div class="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4 lg:px-8 lg:py-6">
+	<div
+		class="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4 lg:px-8 lg:py-6"
+	>
 		<div class="flex items-center gap-3">
-			<div
+			<!-- <div
 				class="flex h-10 w-10 items-center justify-center rounded-sm bg-sky-500 text-sm font-semibold tracking-wide"
 			>
 				WSC
-			</div>
+			</div> -->
+			<img
+				src="/images/logo.png"
+				alt="Equipo legal en reunión"
+				class="relative z-10 h-15 w-15 object-cover"
+				loading="lazy"
+			/>
 			<div class="leading-tight">
-				<p class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-200">
+				<p
+					class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-200"
+				>
 					<span class="lang-es">World Solved Case</span>
 					<span class="lang-en">World Solved Case</span>
 				</p>
@@ -24,7 +35,9 @@
 			</div>
 		</div>
 
-		<nav class="hidden items-center gap-8 text-xs font-medium uppercase tracking-[0.18em] text-slate-200 md:flex">
+		<nav
+			class="hidden items-center gap-8 text-xs font-medium uppercase tracking-[0.18em] text-slate-200 md:flex"
+		>
 			<a href="#nosotros" class="transition-colors hover:text-white">
 				<span class="lang-es">Nosotros</span>
 				<span class="lang-en">About us</span>
@@ -33,8 +46,12 @@
 				<span class="lang-es">Servicios</span>
 				<span class="lang-en">Services</span>
 			</a>
-			
-			<a href="#english" class="transition-colors hover:text-white" data-lang-toggle>
+
+			<a
+				href="#english"
+				class="transition-colors hover:text-white"
+				data-lang-toggle
+			>
 				<span class="lang-es">English</span>
 				<span class="lang-en">Español</span>
 			</a>
@@ -75,16 +92,13 @@
 				<span class="relative block h-3.5 w-4">
 					<span
 						class="absolute inset-x-0 top-0 h-0.5 rounded bg-sky-400 transition-transform"
-						data-line="1"
-					></span>
+						data-line="1"></span>
 					<span
 						class="absolute inset-x-0 top-1/2 h-0.5 -translate-y-1/2 rounded bg-sky-400 transition-opacity"
-						data-line="2"
-					></span>
+						data-line="2"></span>
 					<span
 						class="absolute inset-x-0 bottom-0 h-0.5 rounded bg-sky-400 transition-transform"
-						data-line="3"
-					></span>
+						data-line="3"></span>
 				</span>
 			</button>
 		</div>
@@ -95,18 +109,30 @@
 		class="pointer-events-none absolute inset-x-0 top-full origin-top transform bg-slate-950/98 px-6 pb-5 pt-2 text-sm opacity-0 shadow-lg shadow-black/40 ring-1 ring-slate-800/80 backdrop-blur-md transition duration-200 md:hidden"
 		data-mobile-nav
 	>
-		<nav class="flex flex-col gap-2 text-xs font-medium uppercase tracking-[0.2em] text-slate-100">
-			<a href="#nosotros" class="py-1.5 transition-colors hover:text-sky-300">
+		<nav
+			class="flex flex-col gap-2 text-xs font-medium uppercase tracking-[0.2em] text-slate-100"
+		>
+			<a
+				href="#nosotros"
+				class="py-1.5 transition-colors hover:text-sky-300"
+			>
 				<span class="lang-es">Nosotros</span>
 				<span class="lang-en">About us</span>
 			</a>
-		
-			<a href="#services" class="py-1.5 transition-colors hover:text-sky-300">
+
+			<a
+				href="#services"
+				class="py-1.5 transition-colors hover:text-sky-300"
+			>
 				<span class="lang-es">Servicios</span>
 				<span class="lang-en">Services</span>
 			</a>
-		
-			<a href="#english" class="py-1.5 transition-colors hover:text-sky-300" data-lang-toggle>
+
+			<a
+				href="#english"
+				class="py-1.5 transition-colors hover:text-sky-300"
+				data-lang-toggle
+			>
 				<span class="lang-es">English</span>
 				<span class="lang-en">Español</span>
 			</a>
@@ -122,13 +148,13 @@
 	</div>
 
 	<script type="module">
-		document.addEventListener('DOMContentLoaded', () => {
-			const header = document.querySelector('[data-site-header]');
+		document.addEventListener("DOMContentLoaded", () => {
+			const header = document.querySelector("[data-site-header]");
 			if (!header) return;
 
-			const mobileToggle = header.querySelector('[data-mobile-toggle]');
-			const mobileNav = header.querySelector('[data-mobile-nav]');
-			const langToggles = header.querySelectorAll('[data-lang-toggle]');
+			const mobileToggle = header.querySelector("[data-mobile-toggle]");
+			const mobileNav = header.querySelector("[data-mobile-nav]");
+			const langToggles = header.querySelectorAll("[data-lang-toggle]");
 
 			if (!mobileToggle || !mobileNav) return;
 
@@ -137,28 +163,35 @@
 			const line3 = mobileToggle.querySelector('[data-line="3"]');
 
 			const setMenuState = (open) => {
-				mobileNav.style.opacity = open ? '1' : '0';
-				mobileNav.style.pointerEvents = open ? 'auto' : 'none';
-				mobileNav.style.transform = open ? 'scaleY(1)' : 'scaleY(0.9)';
-				mobileToggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+				mobileNav.style.opacity = open ? "1" : "0";
+				mobileNav.style.pointerEvents = open ? "auto" : "none";
+				mobileNav.style.transform = open ? "scaleY(1)" : "scaleY(0.9)";
+				mobileToggle.setAttribute(
+					"aria-expanded",
+					open ? "true" : "false",
+				);
 
 				if (line1 && line3 && line2) {
-					line1.style.transform = open ? 'translateY(7px) rotate(45deg)' : 'translateY(0) rotate(0deg)';
-					line3.style.transform = open ? 'translateY(-7px) rotate(-45deg)' : 'translateY(0) rotate(0deg)';
-					line2.style.opacity = open ? '0' : '1';
+					line1.style.transform = open
+						? "translateY(7px) rotate(45deg)"
+						: "translateY(0) rotate(0deg)";
+					line3.style.transform = open
+						? "translateY(-7px) rotate(-45deg)"
+						: "translateY(0) rotate(0deg)";
+					line2.style.opacity = open ? "0" : "1";
 				}
 			};
 
 			let open = false;
 
-			mobileToggle.addEventListener('click', () => {
+			mobileToggle.addEventListener("click", () => {
 				open = !open;
 				setMenuState(open);
 			});
 
 			// Cerrar al hacer click en un link
-			mobileNav.querySelectorAll('a').forEach((link) => {
-				link.addEventListener('click', () => {
+			mobileNav.querySelectorAll("a").forEach((link) => {
+				link.addEventListener("click", () => {
 					open = false;
 					setMenuState(false);
 				});
@@ -166,30 +199,34 @@
 
 			// Language toggle
 			const applyLang = (lang) => {
-				document.documentElement.setAttribute('data-lang', lang);
+				document.documentElement.setAttribute("data-lang", lang);
 				try {
-					window.localStorage.setItem('siteLang', lang);
+					window.localStorage.setItem("siteLang", lang);
 				} catch {}
 			};
 
 			const stored = (() => {
 				try {
-					return window.localStorage.getItem('siteLang');
+					return window.localStorage.getItem("siteLang");
 				} catch {
 					return null;
 				}
 			})();
 
-			applyLang(stored === 'en' ? 'en' : 'es');
+			applyLang(stored === "en" ? "en" : "es");
 
 			langToggles.forEach((el) => {
-				el.addEventListener('click', (event) => {
+				el.addEventListener("click", (event) => {
 					event.preventDefault();
-					const current = document.documentElement.getAttribute('data-lang') === 'en' ? 'en' : 'es';
-					const next = current === 'es' ? 'en' : 'es';
+					const current =
+						document.documentElement.getAttribute("data-lang") ===
+						"en"
+							? "en"
+							: "es";
+					const next = current === "es" ? "en" : "es";
 					applyLang(next);
 				});
 			});
 		});
 	</script>
-
+</header>
