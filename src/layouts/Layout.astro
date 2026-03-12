@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import Footer from '../components/Footer.astro';
 ---
 
 <!doctype html>
@@ -15,8 +16,9 @@ import '../styles/global.css';
 		<meta name="author" content="World solved case" />
 		<title>World solved case</title>
 	</head>
-	<body>
+	<body class="bg-slate-950 text-slate-50">
 		<slot />
+		<Footer />
 	</body>
 </html>
 
