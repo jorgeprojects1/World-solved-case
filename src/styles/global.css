@@ -13,3 +13,7 @@ html[data-lang='en'] {
 		display: none;
 	}
 }
+
+html {
+	scroll-behavior: smooth;
+}
