@@ -7,7 +7,7 @@
 	data-site-header
 >
 	<div
-		class="mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4 lg:px-8 lg:py-6"
+		class="menupadding mx-auto flex w-full max-w-6xl items-center justify-between px-6 py-4 lg:px-8 lg:py-6"
 	>
 		<div class="flex items-center gap-3">
 			<!-- <div
@@ -150,17 +150,55 @@
 
 	<script type="module">
 		
+		// Shrink header on scroll down, restore on scroll up/top y remueve el style al volver al top
+		let shrinkStyleEl = null;
 
-		// Estilos para reducir el alto del header en modo shrink
-		const style = document.createElement("style");
-		style.innerHTML = `
-			[data-site-header].header-shrink {
-				padding-top: calc(var(--header-padding-top, 20px) - 8px) !important;
-				padding-bottom: calc(var(--header-padding-bottom, 20px) - 8px) !important;
-				transition: padding 0.25s cubic-bezier(0.4,0,0.2,1);
-			}
-		`;
-		document.head.appendChild(style);
+		document.addEventListener("DOMContentLoaded", () => {
+			const header = document.querySelector("[data-site-header]");
+			if (!header) return;
+
+			let isShrunk = false;
+
+			const applyShrink = () => {
+				if (!isShrunk) {
+					header.classList.add("header-shrink");
+					// Insert style for menupadding if not already present
+					if (!shrinkStyleEl) {
+						shrinkStyleEl = document.createElement("style");
+						shrinkStyleEl.innerHTML = `
+							.menupadding {
+								padding-top: calc(var(--header-padding-top, 15px) - 8px) !important;
+								padding-bottom: calc(var(--header-padding-bottom, 15px ) - 8px) !important;
+								transition: padding 0.25s cubic-bezier(0.4,0,0.2,1);
+							}
+						`;
+						document.head.appendChild(shrinkStyleEl);
+					}
+					isShrunk = true;
+				}
+			};
+
+			const removeShrink = () => {
+				if (isShrunk) {
+					header.classList.remove("header-shrink");
+					// Remove shrink style if it exists
+					if (shrinkStyleEl) {
+						shrinkStyleEl.remove();
+						shrinkStyleEl = null;
+					}
+					isShrunk = false;
+				}
+			};
+
+			window.addEventListener("scroll", () => {
+				const currentScroll = window.scrollY || window.pageYOffset;
+				if (currentScroll > 16) {
+					applyShrink();
+				} else {
+					removeShrink();
+				}
+			});
+		});
 
 		document.addEventListener("DOMContentLoaded", () => {
 			const header = document.querySelector("[data-site-header]");
