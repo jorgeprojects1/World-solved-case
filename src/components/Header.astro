@@ -18,12 +18,13 @@
 			<img
 				src="/images/logo.png"
 				alt="Equipo legal en reunión"
-				class="relative z-10 h-15 w-15 object-cover"
+				class="relative z-10 w-20  h-20 sm:h-15 sm:w-15 object-cover"
 				loading="lazy"
 			/>
 			<div class="leading-tight">
 				<p
 					class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-200"
+					
 				>
 					<span class="lang-es">World Solved Case</span>
 					<span class="lang-en">World Solved Case</span>
@@ -148,6 +149,19 @@
 	</div>
 
 	<script type="module">
+		
+
+		// Estilos para reducir el alto del header en modo shrink
+		const style = document.createElement("style");
+		style.innerHTML = `
+			[data-site-header].header-shrink {
+				padding-top: calc(var(--header-padding-top, 20px) - 8px) !important;
+				padding-bottom: calc(var(--header-padding-bottom, 20px) - 8px) !important;
+				transition: padding 0.25s cubic-bezier(0.4,0,0.2,1);
+			}
+		`;
+		document.head.appendChild(style);
+
 		document.addEventListener("DOMContentLoaded", () => {
 			const header = document.querySelector("[data-site-header]");
 			if (!header) return;

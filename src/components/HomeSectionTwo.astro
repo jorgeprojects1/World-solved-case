@@ -1,4 +1,20 @@
 ---
+const practiceAreas = [
+	{ es: 'Derecho Laboral', en: 'Labor Law' },
+	{ es: 'Derecho Civil y Comercial', en: 'Civil and Commercial Law' },
+	{
+		es: 'Derecho penal, incluyendo delitos de alta tecnología y fraude electrónico',
+		en: 'Criminal Law, including high-tech crimes and electronic fraud',
+	},
+	{ es: 'Derecho Administrativo', en: 'Administrative Law' },
+	{ es: 'Derecho Corporativo', en: 'Corporate Law' },
+	{ es: 'Derecho de la Seguridad Social', en: 'Social Security Law' },
+	{ es: 'Derecho del Consumidor', en: 'Consumer Law' },
+	{ es: 'Arbitraje', en: 'Arbitration' },
+	{ es: 'Derecho Constitucional', en: 'Constitutional Law' },
+	{ es: 'Fusiones y Adquisiciones', en: 'Mergers and Acquisitions' },
+	{ es: 'Derecho Impositivo', en: 'Tax Law' },
+];
 ---
 
 <section
@@ -11,7 +27,7 @@
 	<div class="absolute inset-0 bg-black/70"></div>
 
 	<div class="relative mx-auto flex max-w-6xl flex-col gap-8 px-6 lg:flex-row lg:gap-16 lg:px-8">
-		<div class="w-full lg:w-2/3">
+		<div class="w-full ">
 			<h2 class="text-2xl  text-sky-400 tracking-[0.2em]  sm:text-3xl">
 				<span class="lang-es">ÁREAS DE PRÁCTICA</span>
 				<span class="lang-en">PRACTICE AREAS</span>
@@ -27,34 +43,108 @@
 				including the following areas:
 			</p>
 
-			<div class="mt-6 grid gap-2 text-sm text-slate-100 sm:text-base">
-				<ul class="space-y-1.5 lang-es">
-					<li>• Derecho Laboral</li>
-					<li>• Derecho Civil y Comercial</li>
-					<li>• Derecho penal, incluyendo delitos de alta tecnología y fraude electrónico</li>
-					<li>• Derecho Administrativo</li>
-					<li>• Derecho Corporativo</li>
-					<li>• Derecho de la Seguridad Social</li>
-					<li>• Derecho del Consumidor</li>
-					<li>• Arbitraje</li>
-					<li>• Derecho Constitucional</li>
-					<li>• Fusiones y Adquisiciones</li>
-					<li>• Derecho Impositivo</li>
-				</ul>
-
-				<ul class="space-y-1.5 lang-en">
-					<li>• Labor Law</li>
-					<li>• Civil and Commercial Law</li>
-					<li>• Criminal Law, including high-tech crimes and electronic fraud</li>
-					<li>• Administrative Law</li>
-					<li>• Corporate Law</li>
-					<li>• Social Security Law</li>
-					<li>• Consumer Law</li>
-					<li>• Arbitration</li>
-					<li>• Constitutional Law</li>
-					<li>• Mergers and Acquisitions</li>
-					<li>• Tax Law</li>
-				</ul>
+			<div class="mt-6 grid gap-4 text-sm text-slate-100 sm:grid-cols-2 lg:grid-cols-4">
+				{practiceAreas.map((area, index) => (
+					<div class="flex  gap-3 rounded-lg items-center border border-slate-700/70 bg-slate-900/70 px-4 py-3 shadow-md shadow-black/40 backdrop-blur-sm">
+						<div
+							class="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-sky-500/90 text-white"
+							aria-hidden="true"
+						>
+							{index === 0 && (
+								<svg viewBox="0 0 24 24" class="h-5 w-5">
+									<path
+										fill="currentColor"
+										d="M6 4h12a2 2 0 0 1 2 2v9h-2V6H6v9H4V6a2 2 0 0 1 2-2Zm-2 13h16v2H4v-2Zm5-7h6v2H9v-2Zm0 4h4v2H9v-2Z"
+									/>
+								</svg>
+							)}
+							{index === 1 && (
+								<svg viewBox="0 0 24 24" class="h-5 w-5">
+									<path
+										fill="currentColor"
+										d="M5 4h14v2H5V4Zm1 4h12v2H6V8Zm-2 4h16v2H4v-2Zm2 4h12v2H6v-2Z"
+									/>
+								</svg>
+							)}
+							{index === 2 && (
+								<svg viewBox="0 0 24 24" class="h-5 w-5">
+									<path
+										fill="currentColor"
+										d="M12 2a5 5 0 0 1 5 5c0 3.25-3 5.75-4.56 6.81a1 1 0 0 1-1.08 0C10 12.75 7 10.25 7 7a5 5 0 0 1 5-5Zm0 7a2 2 0 1 0-2-2a2 2 0 0 0 2 2Zm-7 9.5A3.5 3.5 0 0 1 8.5 15h7a3.5 3.5 0 0 1 3.5 3.5V21h-2v-2.5A1.5 1.5 0 0 0 15.5 17h-7A1.5 1.5 0 0 0 7 18.5V21H5Z"
+									/>
+								</svg>
+							)}
+							{index === 3 && (
+								<svg viewBox="0 0 24 24" class="h-5 w-5">
+									<path
+										fill="currentColor"
+										d="M4 4h16v2H4V4Zm2 4h12v2H6V8Zm-2 4h16v6H4v-6Zm2 2v2h12v-2H6Z"
+									/>
+								</svg>
+							)}
+							{index === 4 && (
+								<svg viewBox="0 0 24 24" class="h-5 w-5">
+									<path
+										fill="currentColor"
+										d="M5 3h14l-1 16H6L5 3Zm3 2v3h2V5H8Zm0 5v3h2v-3H8Zm3-5v3h2V5h-2Zm0 5v3h2v-3h-2Z"
+									/>
+								</svg>
+							)}
+							{index === 5 && (
+								<svg viewBox="0 0 24 24" class="h-5 w-5">
+									<path
+										fill="currentColor"
+										d="M12 2L4 6v4c0 4.42 2.84 8.41 7 9.9c4.16-1.49 7-5.48 7-9.9V6l-6.99-4ZM12 4.15L17 6.7v3.3c0 3.33-2.06 6.45-5 7.76c-2.94-1.31-5-4.43-5-7.76V6.7l5-2.55Z"
+									/>
+								</svg>
+							)}
+							{index === 6 && (
+								<svg viewBox="0 0 24 24" class="h-5 w-5">
+									<path
+										fill="currentColor"
+										d="M5 5h14v2H5V5Zm0 4h10v2H5V9Zm0 4h14v2H5v-2Zm0 4h10v2H5v-2Z"
+									/>
+								</svg>
+							)}
+							{index === 7 && (
+								<svg viewBox="0 0 24 24" class="h-5 w-5">
+									<path
+										fill="currentColor"
+										d="M12 2l7 4v4l-7 4l-7-4V6l7-4Zm0 2.18L7 6.47v2.05l5 2.86l5-2.86V6.47l-5-2.29ZM5 14h2v6H5v-6Zm12 0h2v6h-2v-6Zm-6 0h2v6h-2v-6Z"
+									/>
+								</svg>
+							)}
+							{index === 8 && (
+								<svg viewBox="0 0 24 24" class="h-5 w-5">
+									<path
+										fill="currentColor"
+										d="M5 4h14v2H5V4Zm2 4h10v2H7V8Zm-2 4h14v2H5v-2Zm2 4h10v2H7v-2Z"
+									/>
+								</svg>
+							)}
+							{index === 9 && (
+								<svg viewBox="0 0 24 24" class="h-5 w-5">
+									<path
+										fill="currentColor"
+										d="M4 4h16v2H4V4Zm2 4h12v2H6V8Zm-2 4h16v4H4v-4Zm2 2v0h12v0H6Z"
+									/>
+								</svg>
+							)}
+							{index === 10 && (
+								<svg viewBox="0 0 24 24" class="h-5 w-5">
+									<path
+										fill="currentColor"
+										d="M5 4h14v2H5V4Zm1 4h12v2H6V8Zm-2 4h16v2H4v-2Zm2 4h12v2H6v-2Z"
+									/>
+								</svg>
+							)}
+						</div>
+						<p class="text-sm font-medium leading-snug text-slate-50 mb-0">
+							<span class="lang-es">{area.es}</span>
+							<span class="lang-en">{area.en}</span>
+						</p>
+					</div>
+				))}
 			</div>
 		</div>
 	</div>
