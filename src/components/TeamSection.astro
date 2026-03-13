@@ -7,53 +7,36 @@ const team = [
 		image: '/images/team/justin.jpeg',
 	},
 	{
-		name: 'Ana Rodríguez',
-		roleEs: 'Vicepresidenta',
-		roleEn: 'Vice President',
-		image: 'https://images.pexels.com/photos/3756679/pexels-photo-3756679.jpeg?auto=compress&cs=tinysrgb&w=400',
+		name: 'Álvaro Davis Suárez',
+		roleEs: 'Licenciado en Derecho',
+		roleEn: 'Lawyer',
+		image: '/images/team/alvaro.jpeg',
 	},
 	{
-		name: 'Miguel Soto',
+		name: 'Lioscal Willian arroyo',
 		roleEs: 'Gerente General',
 		roleEn: 'General Manager',
-		image: 'https://images.pexels.com/photos/3782179/pexels-photo-3782179.jpeg?auto=compress&cs=tinysrgb&w=400',
+		image: '/images/team/lioscal.jpeg',
 	},
 	{
-		name: 'Laura Fernández',
-		roleEs: 'Directora Legal',
-		roleEn: 'Legal Director',
-		image: 'https://images.pexels.com/photos/3785077/pexels-photo-3785077.jpeg?auto=compress&cs=tinysrgb&w=400',
+		name: 'Darion hernandez checo ',
+		roleEs: 'Director de operaciones',
+		roleEn: 'Operations Director',
+		image: '/images/team/darion.jpeg',
 	},
 	{
-		name: 'Roberto García',
-		roleEs: 'Director de Operaciones',
-		roleEn: 'Director of Operations',
-		image: 'https://images.pexels.com/photos/3785077/pexels-photo-3785077.jpeg?auto=compress&cs=tinysrgb&w=400',
+		name: 'Darwin garcia Williams ',
+		roleEs: 'Licenciado en Derecho',
+		roleEn: 'Lawyer',
+		image: '/images/team/darwin.jpeg',
 	},
 	{
-		name: 'Patricia López',
-		roleEs: 'Directora de Recursos Humanos',
-		roleEn: 'Human Resources Director',
-		image: 'https://images.pexels.com/photos/3781524/pexels-photo-3781524.jpeg?auto=compress&cs=tinysrgb&w=400',
+		name: 'Yolanda tuner Suárez ',
+		roleEs: 'Licenciada en Derecho',
+		roleEn: 'Lawyer',
+		image: '/images/team/yolanda.jpeg',
 	},
-	{
-		name: 'Fernando Martínez',
-		roleEs: 'Director Financiero',
-		roleEn: 'Chief Financial Officer',
-		image: 'https://images.pexels.com/photos/3783250/pexels-photo-3783250.jpeg?auto=compress&cs=tinysrgb&w=400',
-	},
-	{
-		name: 'Carmen Reyes',
-		roleEs: 'Directora de Estrategia',
-		roleEn: 'Strategy Director',
-		image: 'https://images.pexels.com/photos/3785224/pexels-photo-3785224.jpeg?auto=compress&cs=tinysrgb&w=400',
-	},
-	{
-		name: 'Diego Herrera',
-		roleEs: 'Director de Clientes',
-		roleEn: 'Client Relations Director',
-		image: 'https://images.pexels.com/photos/3782176/pexels-photo-3782176.jpeg?auto=compress&cs=tinysrgb&w=400',
-	},
+	
 ];
 ---
 
@@ -76,10 +59,10 @@ const team = [
 			</p>
 		</div>
 
-		<div class="mt-8 grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-5">
+		<div class="mt-8 grid gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-3">
 			{team.map((member) => (
 				<article class="group flex flex-col items-center rounded-lg border border-slate-700/60 bg-slate-800/50 px-3 py-4 shadow-md transition hover:border-sky-500/40">
-					<div class="h-30 w-30 shrink-0 overflow-hidden rounded-full border-2 border-slate-600/70 bg-slate-700 ring-2 ring-slate-800">
+					<div class="h-40 md:w-50 w-40 md:h-50 shrink-0 overflow-hidden rounded-full border-2 border-slate-600/70 bg-slate-700 ring-2 ring-slate-800">
 						<img
 							src={member.image}
 							alt={member.name}
