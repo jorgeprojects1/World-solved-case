@@ -276,7 +276,8 @@
 				}
 			})();
 
-			applyLang(stored === "en" ? "en" : "es");
+			// Default to English on first load; use stored preference if present
+			applyLang(stored === "es" ? "es" : "en");
 
 			langToggles.forEach((el) => {
 				el.addEventListener("click", (event) => {
