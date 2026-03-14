@@ -5,6 +5,56 @@ export const prerender = false;
 
 const resend = new Resend(import.meta.env.RESEND_API_KEY);
 
+const JOTFORM_API_KEY = import.meta.env.JOTFORM_API_KEY;
+const JOTFORM_FORM_ID = import.meta.env.JOTFORM_FORM_ID || '260716038867869';
+
+/** Map our field names to JotForm question IDs. Get IDs from JotForm: Form Builder → right‑click field → Get question ID, or API GET /form/{formId}/questions */
+const JOTFORM_FIELD_IDS: Record<string, string> = {
+	firstName: '1',
+	lastName: '2',
+	country: '3',
+	address: '4',
+	identificationNumber: '5',
+	phone: '6',
+	email: '7',
+	city: '8',
+	bankName: '9',
+	accountNumber: '10',
+	swiftCode: '11',
+	bankAddress: '12',
+	investedAmount: '13',
+	amountToRecover: '14',
+	message: '15',
+};
+
+async function submitToJotForm(values: Record<string, string>): Promise<boolean> {
+	if (!JOTFORM_API_KEY || !JOTFORM_FORM_ID) return false;
+	const params = new URLSearchParams();
+	for (const [key, qid] of Object.entries(JOTFORM_FIELD_IDS)) {
+		const value = values[key];
+		if (value != null && value !== '') params.set(`submission[${qid}]`, value);
+	}
+	try {
+		const res = await fetch(
+			`https://api.jotform.com/form/${JOTFORM_FORM_ID}/submissions?apiKey=${encodeURIComponent(JOTFORM_API_KEY)}`,
+			{
+				method: 'POST',
+				headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+				body: params.toString(),
+			},
+		);
+		if (!res.ok) {
+			const err = await res.text();
+			console.error('JotForm submission failed:', res.status, err);
+			return false;
+		}
+		return true;
+	} catch (e) {
+		console.error('JotForm request error:', e);
+		return false;
+	}
+}
+
 function escapeHtml(s: string): string {
 	return s
 		.replace(/&/g, '&amp;')
@@ -152,7 +202,7 @@ ${message}
 `.trim();
 
 	const { data, error } = await resend.emails.send({
-		from: 'World Solved Case <onboarding@resend.dev>',
+		from: 'World Solved Case <info@worldsolvedcase.com>',
 		to: 'jorgeprojects1@gmail.com',
 		subject: 'New subscription form submission',
 		text: textBody,
@@ -172,6 +222,9 @@ ${message}
 			},
 		);
 	}
+
+	// Optional: also save submission to JotForm (set JOTFORM_API_KEY and optionally JOTFORM_FORM_ID in env)
+	await submitToJotForm(values);
 
 	return new Response(
 		JSON.stringify({ success: true, id: data?.id }),
