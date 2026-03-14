@@ -1,4 +1,10 @@
 ---
+// Clientes satisfechos: 750 ahora, +7 por cada mes que pase (sin tope)
+const startDate = new Date('2025-03-01');
+const now = new Date();
+const monthsElapsed = Math.max(0, (now.getFullYear() - startDate.getFullYear()) * 12 + (now.getMonth() - startDate.getMonth()));
+const satisfiedClients = 750 + monthsElapsed * 7;
+
 const stats = [
 	{
 		value: 30,
@@ -13,7 +19,7 @@ const stats = [
 		icon: 'team',
 	},
 	{
-		value: 750,
+		value: satisfiedClients,
 		labelEs: 'Clientes satisfechos',
 		labelEn: 'Satisfied clients',
 		icon: 'clients',
@@ -101,22 +107,24 @@ const stats = [
 		const counters = Array.from(root.querySelectorAll('[data-stat-value]'));
 		if (!counters.length) return;
 
-		const duration = 1500;
+		const formatNumber = (n) => n.toLocaleString('es-ES', { maximumFractionDigits: 0 });
 
 		const animateCounter = (el) => {
 			const target = Number(el.getAttribute('data-target') || '0');
 			if (!target) return;
 
+			const duration = target >= 10000 ? 2500 : 1500;
 			const startTime = performance.now();
 
 			const step = (now) => {
 				const progress = Math.min(1, (now - startTime) / duration);
-				const value = Math.floor(progress * target);
-				el.textContent = value.toString();
+				const eased = 1 - Math.pow(1 - progress, 1.5);
+				const value = Math.floor(eased * target);
+				el.textContent = formatNumber(value);
 				if (progress < 1) {
 					requestAnimationFrame(step);
 				} else {
-					el.textContent = target.toString();
+					el.textContent = formatNumber(target);
 				}
 			};
 
