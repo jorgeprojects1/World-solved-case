@@ -1,0 +1,479 @@
+---
+import '../../styles/global.css';
+import { getSessionFromRequest } from '../../lib/auth';
+
+export const prerender = false;
+
+let session: { user: string } | null = null;
+try {
+	session = getSessionFromRequest(Astro.request);
+} catch {
+	// Env not set
+}
+if (!session) return Astro.redirect('/login');
+
+const apiKey = import.meta.env.JOTFORM_API_KEY;
+const formId = import.meta.env.JOTFORM_FORM_ID || '260716038867869';
+
+interface JotFormAnswer {
+	name?: string;
+	text?: string;
+	answer?: string | string[];
+}
+
+interface JotFormSubmission {
+	id: string;
+	created_at: string;
+	status: string;
+	answers: Record<string, JotFormAnswer>;
+}
+
+let submissions: JotFormSubmission[] = [];
+let fetchError: string | null = null;
+
+if (apiKey && formId) {
+	try {
+		const res = await fetch(
+			`https://api.jotform.com/form/${formId}/submissions?apiKey=${encodeURIComponent(apiKey)}&limit=100&orderby=created_at`,
+			{ cache: 'no-store' },
+		);
+		const data = await res.json();
+		if (data.content) {
+			submissions = Array.isArray(data.content)
+				? (data.content as JotFormSubmission[])
+				: (Object.values(data.content) as JotFormSubmission[]);
+			submissions.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
+		} else if (data.error) {
+			fetchError = data.error;
+		}
+	} catch (e) {
+		fetchError = e instanceof Error ? e.message : 'Error al cargar';
+	}
+} else {
+	fetchError = 'Faltan JOTFORM_API_KEY o JOTFORM_FORM_ID';
+}
+
+function answerText(a: JotFormAnswer): string {
+	if (!a) return '—';
+	const ans = a.answer;
+	if (ans == null) return '—';
+	if (Array.isArray(ans)) return ans.join(', ') || '—';
+	if (typeof ans === 'object') return JSON.stringify(ans);
+	return String(ans);
+}
+
+const defaultLabels: Record<string, string> = {
+	'1': 'Nombre', '2': 'Apellido', '3': 'País', '4': 'Dirección', '5': 'Nº identificación',
+	'6': 'Teléfono', '7': 'Email', '8': 'Ciudad', '9': 'Banco', '10': 'Nº cuenta',
+	'11': 'SWIFT', '12': 'Dirección banco', '13': 'Monto invertido', '14': 'Monto a recuperar', '15': 'Mensaje',
+};
+
+// Sinónimos para encontrar el valor cuando JotForm usa otro ID o mismo name que el formulario
+const labelSynonyms: Record<string, string[]> = {
+	'3': ['country', 'pais', 'país'],
+	'5': ['identification', 'identificación', 'id number', 'nº identificación', 'numero identificacion'],
+	'6': ['phone', 'teléfono', 'telefono'],
+};
+
+// Claves alternativas por nombre de campo (JotForm a veces devuelve la key por name)
+const nameKeys: Record<string, string[]> = {
+	'3': ['country', 'pais'],
+	'5': ['identificationNumber', 'identification', 'idnumber'],
+	'6': ['phone', 'telefono'],
+};
+
+// Solo mostrar campos del formulario (1-15); evita duplicados y metadatos (tags, message, etc.)
+const answerKeys = Object.keys(defaultLabels).sort(
+	(a, b) => Number(a) - Number(b) || a.localeCompare(b),
+);
+
+function normalizeForMatch(s: string): string {
+	return (s ?? '')
+		.toLowerCase()
+		.normalize('NFD')
+		.replace(/\p{Diacritic}/gu, '');
+}
+
+function getAnswerValue(sub: JotFormSubmission, key: string, label: string): string {
+	const answers = sub.answers ?? {};
+	const tryKeys = [key, `q${key}`, ...(nameKeys[key] ?? [])];
+	for (const k of tryKeys) {
+		const a = answers[k];
+		const text = answerText(a ?? {});
+		if (text !== '—' && text !== '') return text;
+	}
+	const toMatch = [label, ...(labelSynonyms[key] ?? [])].map((s) => normalizeForMatch(s)).filter(Boolean);
+	for (const k of Object.keys(answers)) {
+		const ans = answers[k];
+		const ansLabel = (ans?.text ?? ans?.name ?? k ?? '').toString();
+		const ansNorm = normalizeForMatch(ansLabel);
+		if (!ansNorm) continue;
+		const keyNorm = normalizeForMatch(k);
+		if (toMatch.some((m) => m && (ansNorm.includes(m) || m.includes(ansNorm) || keyNorm.includes(m) || m.includes(keyNorm)))) return answerText(ans);
+	}
+	return '—';
+}
+
+function labelForKey(key: string): string {
+	const first = submissions.find((s) => s.answers?.[key]);
+	const text = first?.answers?.[key]?.text;
+	return defaultLabels[key] ?? text ?? key;
+}
+
+function getName(sub: JotFormSubmission): string {
+	const a1 = answerText(sub.answers?.['1'] ?? {});
+	const a2 = answerText(sub.answers?.['2'] ?? {});
+	return [a1, a2].filter(Boolean).join(' ') || '—';
+}
+
+function getEmail(sub: JotFormSubmission): string {
+	return answerText(sub.answers?.['7'] ?? {});
+}
+
+const PER_PAGE = 10;
+const totalPages = Math.max(1, Math.ceil(submissions.length / PER_PAGE));
+
+const serializedSubmissions = submissions.map((sub) => ({
+	id: sub.id,
+	created_at: sub.created_at,
+	answers: sub.answers,
+}));
+
+const serializedLabels = answerKeys.map((k) => ({ key: k, label: labelForKey(k) }));
+const serializedSynonyms = labelSynonyms;
+const serializedNameKeys = nameKeys;
+---
+
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<title>Panel – World Solved Case</title>
+		<link rel="icon" href="/images/logo.png" />
+	</head>
+	<body class="min-h-screen bg-slate-950 text-slate-100">
+		<header class="border-b border-slate-800 bg-slate-900/80 px-6 py-4">
+			<div class="mx-auto flex max-w-6xl items-center justify-between">
+				<h1 class="text-lg font-semibold text-sky-400">Panel de envíos</h1>
+				<div class="flex items-center gap-3">
+					{submissions.length > 0 && (
+						<button
+							type="button"
+							data-export-excel
+							class="rounded-md border border-slate-600 bg-slate-800 px-3 py-1.5 text-sm text-slate-200 hover:bg-slate-700"
+						>
+							Exportar Excel
+						</button>
+					)}
+					<a
+						href="/api/auth/logout"
+						class="rounded-md border border-slate-600 px-3 py-1.5 text-sm text-slate-300 hover:bg-slate-800"
+					>
+						Cerrar sesión
+					</a>
+				</div>
+			</div>
+		</header>
+
+		<main class="mx-auto max-w-6xl px-6 py-8">
+			{fetchError ? (
+				<p class="rounded-lg border border-red-800 bg-red-900/30 px-4 py-3 text-red-300">{fetchError}</p>
+			) : submissions.length === 0 ? (
+				<p class="text-slate-400">No hay envíos todavía.</p>
+			) : (
+				<>
+					<div class="mb-4 flex flex-wrap items-center gap-3">
+						<div class="relative flex-1 min-w-[200px] max-w-sm">
+							<input
+								type="search"
+								data-search
+								placeholder="Buscar por nombre o correo..."
+								class="w-full rounded-md border border-slate-700 bg-slate-800/80 px-3 py-2 pl-9 text-sm text-slate-100 placeholder-slate-500 outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500/50"
+								aria-label="Buscar por nombre o correo"
+							/>
+							<svg class="absolute left-2.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+								<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+							</svg>
+						</div>
+						<div class="flex items-center gap-2">
+							<label for="per-page" class="text-sm text-slate-400">Mostrar</label>
+							<select
+								id="per-page"
+								data-per-page
+								class="rounded-md border border-slate-700 bg-slate-800/80 px-2.5 py-2 text-sm text-slate-200 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500/50"
+							>
+								<option value="10">10</option>
+								<option value="25">25</option>
+								<option value="50">50</option>
+								<option value="100">100</option>
+							</select>
+							<span class="text-sm text-slate-400">por página</span>
+						</div>
+					</div>
+					<div class="overflow-x-auto rounded-lg border border-slate-700">
+						<table class="w-full text-left text-sm">
+							<thead class="bg-slate-800/80 text-slate-300">
+								<tr>
+									<th class="px-4 py-3 font-medium">Fecha</th>
+									<th class="px-4 py-3 font-medium">Nombre</th>
+									<th class="px-4 py-3 font-medium">Correo</th>
+									<th class="px-4 py-3 font-medium">País</th>
+									<th class="px-4 py-3 font-medium text-right">Acciones</th>
+								</tr>
+							</thead>
+							<tbody data-panel-tbody>
+								<!-- Rellenado por el script -->
+							</tbody>
+						</table>
+					</div>
+
+					<nav class="mt-4 flex flex-wrap items-center justify-center gap-2" data-pagination aria-label="Paginación">
+						<button type="button" data-page-prev class="rounded border border-slate-600 px-3 py-1.5 text-sm text-slate-300 hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed" aria-label="Anterior">
+							← Anterior
+						</button>
+						<span class="text-slate-400" data-page-info>Página 1 de 1</span>
+						<button type="button" data-page-next class="rounded border border-slate-600 px-3 py-1.5 text-sm text-slate-300 hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed" aria-label="Siguiente">
+							Siguiente →
+						</button>
+					</nav>
+				</>
+			)}
+		</main>
+
+		<!-- Modal -->
+		<div
+			id="detail-modal"
+			class="fixed inset-0 z-50 hidden items-center justify-center bg-black/60 p-4"
+			aria-modal="true"
+			role="dialog"
+			aria-labelledby="modal-title"
+		>
+			<div class="max-h-[90vh] w-full max-w-lg overflow-hidden rounded-xl border border-slate-700 bg-slate-900 shadow-xl">
+				<div class="flex items-center justify-between border-b border-slate-700 px-4 py-3">
+					<h2 id="modal-title" class="font-semibold text-sky-400">Detalle del envío</h2>
+					<button type="button" data-modal-close class="text-slate-400 hover:text-white" aria-label="Cerrar">
+						<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+					</button>
+				</div>
+				<div class="max-h-[70vh] overflow-y-auto px-4 py-3" data-modal-body>
+					<p class="text-slate-500">Cargando…</p>
+				</div>
+			</div>
+		</div>
+
+		<script define:vars={{ serializedSubmissions, serializedLabels, serializedSynonyms, serializedNameKeys, initialPerPage: PER_PAGE }}>
+			const submissions = serializedSubmissions;
+			const labels = serializedLabels;
+			const labelSynonyms = serializedSynonyms || {};
+			const nameKeys = serializedNameKeys || {};
+			let perPage = initialPerPage;
+			let currentPage = 1;
+			let searchQuery = '';
+
+			function getSubName(sub) {
+				return [sub.answers?.['1'], sub.answers?.['2']].map((a) => answerText(a)).filter(Boolean).join(' ') || '';
+			}
+			function getSubEmail(sub) {
+				return answerText(sub.answers?.['7'] ?? {}) || '';
+			}
+			function getFilteredSubmissions() {
+				const q = (searchQuery || '').trim().toLowerCase().normalize('NFD').replace(/\u0300-\u036f/g, '');
+				if (!q) return submissions;
+				return submissions.filter((sub) => {
+					const name = (getSubName(sub) || '').toLowerCase().normalize('NFD').replace(/\u0300-\u036f/g, '');
+					const email = (getSubEmail(sub) || '').toLowerCase().normalize('NFD').replace(/\u0300-\u036f/g, '');
+					return name.includes(q) || email.includes(q);
+				});
+			}
+
+			function answerText(a) {
+				if (!a) return '—';
+				const ans = a.answer;
+				if (ans == null) return '—';
+				if (Array.isArray(ans)) return ans.join(', ') || '—';
+				if (typeof ans === 'object') return JSON.stringify(ans);
+				return String(ans);
+			}
+
+			function normalizeForMatch(s) {
+				return (s ?? '')
+					.toLowerCase()
+					.normalize('NFD')
+					.replace(/\u0300-\u036f/g, '');
+			}
+
+			function getAnswerValue(sub, key, label) {
+				const answers = sub.answers ?? {};
+				const tryKeys = [key, 'q' + key, ...(nameKeys[key] || [])];
+				for (const k of tryKeys) {
+					const a = answers[k];
+					const text = answerText(a ?? {});
+					if (text !== '—' && text !== '') return text;
+				}
+				const toMatch = [label, ...(labelSynonyms[key] || [])].map((s) => normalizeForMatch(s)).filter(Boolean);
+				for (const k of Object.keys(answers)) {
+					const ans = answers[k];
+					const ansLabel = String(ans?.text ?? ans?.name ?? k ?? '');
+					const ansNorm = normalizeForMatch(ansLabel);
+					if (!ansNorm) continue;
+					const keyNorm = normalizeForMatch(k);
+					if (toMatch.some((m) => m && (ansNorm.includes(m) || m.includes(ansNorm) || keyNorm.includes(m) || m.includes(keyNorm)))) return answerText(ans);
+				}
+				return '—';
+			}
+
+			function renderTable() {
+				const filtered = getFilteredSubmissions();
+				const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
+				if (currentPage > totalPages) currentPage = totalPages;
+				const start = (currentPage - 1) * perPage;
+				const slice = filtered.slice(start, start + perPage);
+				const tbody = document.querySelector('[data-panel-tbody]');
+				if (!tbody) return;
+				const countryLabel = labels.find((l) => l.key === '3')?.label || 'País';
+				tbody.innerHTML = slice
+					.map(
+						(sub, i) => {
+							const idx = start + i;
+							const name = getSubName(sub) || '—';
+							const email = getSubEmail(sub) || '—';
+							const country = getAnswerValue(sub, '3', countryLabel);
+							const date = new Date(sub.created_at).toLocaleString('es');
+							return `<tr class="border-t border-slate-700 hover:bg-slate-800/50" data-row data-index="${idx}">
+								<td class="whitespace-nowrap px-4 py-3 text-slate-400">${date}</td>
+								<td class="px-4 py-3">${escapeHtml(name)}</td>
+								<td class="px-4 py-3">${escapeHtml(email)}</td>
+								<td class="px-4 py-3">${escapeHtml(country)}</td>
+								<td class="px-4 py-3 text-right">
+									<button type="button" data-view data-index="${idx}" class="rounded border border-sky-600 bg-sky-900/50 px-2.5 py-1 cursor-pointer text-xs text-sky-300 hover:bg-sky-800/50">Visualizar</button>
+									<button type="button" data-export-one data-index="${idx}" class="ml-1.5 rounded border border-slate-500 bg-slate-800/50 px-2.5 py-1 cursor-pointer text-xs text-slate-300 hover:bg-slate-700/50">Exportar Excel</button>
+								</td>
+							</tr>`;
+						},
+					)
+					.join('');
+				const infoEl = document.querySelector('[data-page-info]');
+				if (infoEl) infoEl.textContent = `Página ${currentPage} de ${totalPages}`;
+				const prevBtn = document.querySelector('[data-page-prev]');
+				const nextBtn = document.querySelector('[data-page-next]');
+				if (prevBtn) prevBtn.disabled = currentPage <= 1;
+				if (nextBtn) nextBtn.disabled = currentPage >= totalPages;
+			}
+
+			function escapeHtml(s) {
+				const div = document.createElement('div');
+				div.textContent = s;
+				return div.innerHTML;
+			}
+
+			function openModal(e) {
+				const idx = parseInt(e.currentTarget.getAttribute('data-index'), 10);
+				const filtered = getFilteredSubmissions();
+				const sub = filtered[idx];
+				if (!sub) return;
+				const body = document.querySelector('[data-modal-body]');
+				body.innerHTML = labels
+					.map(({ key, label }) => {
+						const text = getAnswerValue(sub, key, label);
+						return `<div class="border-b border-slate-700/50 py-2"><span class="text-slate-500 text-xs uppercase">${escapeHtml(label)}</span><p class="mt-0.5 text-slate-200">${escapeHtml(text)}</p></div>`;
+					})
+					.join('');
+				document.getElementById('detail-modal').classList.remove('hidden');
+				document.getElementById('detail-modal').classList.add('flex');
+			}
+
+			function closeModal() {
+				document.getElementById('detail-modal').classList.add('hidden');
+				document.getElementById('detail-modal').classList.remove('flex');
+			}
+
+			function downloadCsv(headers, rows, filename) {
+				const BOM = '\uFEFF';
+				const csv = [headers.join(','), ...rows.map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(','))].join('\r\n');
+				const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8' });
+				const a = document.createElement('a');
+				a.href = URL.createObjectURL(blob);
+				a.download = filename;
+				a.click();
+				URL.revokeObjectURL(a.href);
+			}
+
+			function exportExcel() {
+				const filtered = getFilteredSubmissions();
+				const headers = ['Fecha', 'Nombre', 'Correo', 'País', ...labels.map((l) => l.label)];
+				const rows = filtered.map((sub) => {
+					const name = [sub.answers?.['1'], sub.answers?.['2']].map((a) => answerText(a)).filter(Boolean).join(' ') || '';
+					const email = answerText(sub.answers?.['7'] ?? {});
+					const countryLabel = labels.find((l) => l.key === '3')?.label || 'País';
+					const country = getAnswerValue(sub, '3', countryLabel);
+					const date = new Date(sub.created_at).toLocaleString('es');
+					const rest = labels.map(({ key, label }) => getAnswerValue(sub, key, label));
+					return [date, name, email, country, ...rest];
+				});
+				downloadCsv(headers, rows, `envios-${new Date().toISOString().slice(0, 10)}.csv`);
+			}
+
+			function exportOneExcel(idx) {
+				const filtered = getFilteredSubmissions();
+				const sub = filtered[idx];
+				if (!sub) return;
+				const countryLabel = labels.find((l) => l.key === '3')?.label || 'País';
+				const headers = ['Fecha', 'Nombre', 'Correo', 'País', ...labels.map((l) => l.label)];
+				const row = [
+					new Date(sub.created_at).toLocaleString('es'),
+					[sub.answers?.['1'], sub.answers?.['2']].map((a) => answerText(a)).filter(Boolean).join(' ') || '',
+					answerText(sub.answers?.['7'] ?? {}),
+					getAnswerValue(sub, '3', countryLabel),
+					...labels.map(({ key, label }) => getAnswerValue(sub, key, label)),
+				];
+				const nameSlug = (row[1] || 'envio').replace(/\s+/g, '-').slice(0, 30);
+				downloadCsv(headers, [row], `envio-${nameSlug}-${sub.id}.csv`);
+			}
+
+			document.querySelector('[data-page-prev]')?.addEventListener('click', () => {
+				if (currentPage > 1) {
+					currentPage--;
+					renderTable();
+				}
+			});
+			document.querySelector('[data-page-next]')?.addEventListener('click', () => {
+				const filtered = getFilteredSubmissions();
+				const totalPages = Math.max(1, Math.ceil(filtered.length / perPage));
+				if (currentPage < totalPages) {
+					currentPage++;
+					renderTable();
+				}
+			});
+			document.querySelector('[data-search]')?.addEventListener('input', (e) => {
+				searchQuery = (e.target && e.target.value) || '';
+				currentPage = 1;
+				renderTable();
+			});
+			document.querySelector('[data-per-page]')?.addEventListener('change', (e) => {
+				const val = e.target && e.target.value;
+				if (val) perPage = parseInt(val, 10);
+				currentPage = 1;
+				renderTable();
+			});
+			document.querySelector('[data-modal-close]')?.addEventListener('click', closeModal);
+			document.getElementById('detail-modal')?.addEventListener('click', (e) => {
+				if (e.target.id === 'detail-modal') closeModal();
+			});
+			document.querySelector('[data-export-excel]')?.addEventListener('click', exportExcel);
+
+			const tbody = document.querySelector('[data-panel-tbody]');
+			const perPageEl = document.querySelector('[data-per-page]');
+			if (perPageEl) perPageEl.value = String(perPage);
+			if (tbody) {
+				renderTable();
+				tbody.addEventListener('click', (e) => {
+					const viewBtn = e.target.closest('[data-view]');
+					if (viewBtn) openModal({ currentTarget: viewBtn });
+					const exportBtn = e.target.closest('[data-export-one]');
+					if (exportBtn) exportOneExcel(parseInt(exportBtn.getAttribute('data-index'), 10));
+				});
+			}
+		</script>
+	</body>
+</html>

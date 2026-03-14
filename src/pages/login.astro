@@ -1,0 +1,82 @@
+---
+import '../styles/global.css';
+import Layout from '../layouts/Layout.astro';
+import { getSessionFromRequest } from '../lib/auth';
+
+export const prerender = false;
+
+try {
+	const session = getSessionFromRequest(Astro.request);
+	if (session) return Astro.redirect('/panel');
+} catch {
+	// Env vars not set; show login form anyway
+}
+---
+
+<Layout>
+	<div class="min-h-[80vh] flex flex-col items-center justify-center px-6 py-12">
+		<div class="w-full max-w-sm rounded-xl border border-slate-700/60 bg-slate-900/70 p-8 shadow-xl">
+			<h1 class="text-center text-xl font-semibold tracking-wide text-slate-100">Panel de administración</h1>
+			<p class="mt-2 text-center text-sm text-slate-400">Inicia sesión para continuar</p>
+
+			<form id="login-form" class="mt-6 space-y-4" method="post" action="/api/auth/login">
+				<div>
+					<label for="username" class="block text-xs font-medium uppercase tracking-wider text-slate-400">Usuario</label>
+					<input
+						id="username"
+						name="username"
+						type="text"
+						required
+						autocomplete="username"
+						class="mt-1 w-full rounded-md border border-slate-600 bg-slate-800/80 px-3 py-2 text-slate-100 outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
+					/>
+				</div>
+				<div>
+					<label for="password" class="block text-xs font-medium uppercase tracking-wider text-slate-400">Contraseña</label>
+					<input
+						id="password"
+						name="password"
+						type="password"
+						required
+						autocomplete="current-password"
+						class="mt-1 w-full rounded-md border border-slate-600 bg-slate-800/80 px-3 py-2 text-slate-100 outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500"
+					/>
+				</div>
+				<div id="login-error" class="hidden text-sm text-red-400"></div>
+				<button
+					type="submit"
+					class="w-full rounded-md bg-sky-500 py-2.5 text-sm font-semibold text-slate-950 transition hover:bg-sky-400"
+				>
+					Iniciar sesión
+				</button>
+			</form>
+		</div>
+	</div>
+</Layout>
+
+<script>
+	document.getElementById('login-form')?.addEventListener('submit', async (e) => {
+		e.preventDefault();
+		const form = e.target as HTMLFormElement;
+		const errEl = document.getElementById('login-error') as HTMLElement;
+		errEl.classList.add('hidden');
+		const fd = new FormData(form);
+		const res = await fetch('/api/auth/login', {
+			method: 'POST',
+			headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+			body: new URLSearchParams(fd as unknown as Record<string, string>).toString(),
+			redirect: 'manual',
+		});
+		if (res.type === 'opaqueredirect' || res.status === 302) {
+			window.location.href = '/panel';
+			return;
+		}
+		const data = await res.json().catch(() => ({}));
+		if (data.success) {
+			window.location.href = '/panel';
+			return;
+		}
+		errEl.textContent = data.error || 'Error al iniciar sesión';
+		errEl.classList.remove('hidden');
+	});
+</script>
