@@ -183,7 +183,8 @@ const serializedNameKeys = nameKeys;
 				<p class="text-slate-400">No hay envíos todavía.</p>
 			) : (
 				<>
-					<div class="mb-4 flex flex-wrap items-center gap-3">
+					<div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+						<div class="flex flex-wrap items-center gap-3">
 						<div class="relative flex-1 min-w-[200px] max-w-sm">
 							<input
 								type="search"
@@ -210,11 +211,23 @@ const serializedNameKeys = nameKeys;
 							</select>
 							<span class="text-sm text-slate-400">por página</span>
 						</div>
+						<button
+							type="button"
+							data-delete-selected
+							disabled
+							class="rounded-md border border-red-800 bg-red-900/50 px-3 py-2 text-sm text-red-200 hover:bg-red-800/60 disabled:opacity-50 disabled:cursor-not-allowed"
+						>
+							Eliminar seleccionados
+						</button>
+						</div>
 					</div>
 					<div class="overflow-x-auto rounded-lg border border-slate-700">
 						<table class="w-full text-left text-sm">
 							<thead class="bg-slate-800/80 text-slate-300">
 								<tr>
+									<th class="w-10 px-2 py-3 text-center">
+										<input type="checkbox" data-select-all aria-label="Seleccionar todos en la página" class="rounded border-slate-600 bg-slate-800 text-sky-500 focus:ring-sky-500" />
+									</th>
 									<th class="px-4 py-3 font-medium">Fecha</th>
 									<th class="px-4 py-3 font-medium">Nombre</th>
 									<th class="px-4 py-3 font-medium">Correo</th>
@@ -270,6 +283,7 @@ const serializedNameKeys = nameKeys;
 			let perPage = initialPerPage;
 			let currentPage = 1;
 			let searchQuery = '';
+			const selectedIds = new Set();
 
 			function getSubName(sub) {
 				return [sub.answers?.['1'], sub.answers?.['2']].map((a) => answerText(a)).filter(Boolean).join(' ') || '';
@@ -340,7 +354,11 @@ const serializedNameKeys = nameKeys;
 							const email = getSubEmail(sub) || '—';
 							const country = getAnswerValue(sub, '3', countryLabel);
 							const date = new Date(sub.created_at).toLocaleString('es');
-							return `<tr class="border-t border-slate-700 hover:bg-slate-800/50" data-row data-index="${idx}">
+							const checked = selectedIds.has(sub.id) ? ' checked' : '';
+							return `<tr class="border-t border-slate-700 hover:bg-slate-800/50" data-row data-index="${idx}" data-submission-id="${escapeHtml(sub.id)}">
+								<td class="w-10 px-2 py-3 text-center">
+									<input type="checkbox" data-row-checkbox data-id="${escapeHtml(sub.id)}" aria-label="Seleccionar" class="rounded border-slate-600 bg-slate-800 text-sky-500 focus:ring-sky-500"${checked} />
+								</td>
 								<td class="whitespace-nowrap px-4 py-3 text-slate-400">${date}</td>
 								<td class="px-4 py-3">${escapeHtml(name)}</td>
 								<td class="px-4 py-3">${escapeHtml(email)}</td>
@@ -359,6 +377,16 @@ const serializedNameKeys = nameKeys;
 				const nextBtn = document.querySelector('[data-page-next]');
 				if (prevBtn) prevBtn.disabled = currentPage <= 1;
 				if (nextBtn) nextBtn.disabled = currentPage >= totalPages;
+				const selectAllEl = document.querySelector('[data-select-all]');
+				if (selectAllEl) {
+					selectAllEl.checked = slice.length > 0 && slice.every((s) => selectedIds.has(s.id));
+					selectAllEl.indeterminate = slice.length > 0 && slice.some((s) => selectedIds.has(s.id)) && !selectAllEl.checked;
+				}
+				const deleteBtn = document.querySelector('[data-delete-selected]');
+				if (deleteBtn) {
+					deleteBtn.disabled = selectedIds.size === 0;
+					deleteBtn.textContent = selectedIds.size > 0 ? `Eliminar seleccionados (${selectedIds.size})` : 'Eliminar seleccionados';
+				}
 			}
 
 			function escapeHtml(s) {
@@ -473,7 +501,76 @@ const serializedNameKeys = nameKeys;
 					const exportBtn = e.target.closest('[data-export-one]');
 					if (exportBtn) exportOneExcel(parseInt(exportBtn.getAttribute('data-index'), 10));
 				});
+				document.querySelector('[data-panel-tbody]')?.closest('table')?.addEventListener('change', (e) => {
+					const target = e.target;
+					if (target?.getAttribute('data-select-all') !== null) {
+						const filtered = getFilteredSubmissions();
+						const start = (currentPage - 1) * perPage;
+						const slice = filtered.slice(start, start + perPage);
+						if (target.checked) slice.forEach((s) => selectedIds.add(s.id));
+						else slice.forEach((s) => selectedIds.delete(s.id));
+						renderTable();
+						return;
+					}
+					if (target?.getAttribute('data-row-checkbox') !== null) {
+						const id = target.getAttribute('data-id');
+						if (id) {
+							if (target.checked) selectedIds.add(id);
+							else selectedIds.delete(id);
+							const filtered = getFilteredSubmissions();
+							const start = (currentPage - 1) * perPage;
+							const slice = filtered.slice(start, start + perPage);
+							const selectAllEl = document.querySelector('[data-select-all]');
+							if (selectAllEl) {
+								selectAllEl.checked = slice.length > 0 && slice.every((s) => selectedIds.has(s.id));
+								selectAllEl.indeterminate = slice.length > 0 && slice.some((s) => selectedIds.has(s.id)) && !selectAllEl.checked;
+							}
+							const deleteBtn = document.querySelector('[data-delete-selected]');
+							if (deleteBtn) {
+								deleteBtn.disabled = selectedIds.size === 0;
+								deleteBtn.textContent = selectedIds.size > 0 ? `Eliminar seleccionados (${selectedIds.size})` : 'Eliminar seleccionados';
+							}
+						}
+					}
+				});
 			}
+			document.querySelector('[data-delete-selected]')?.addEventListener('click', async () => {
+				if (selectedIds.size === 0) return;
+				const ids = Array.from(selectedIds);
+				const btn = document.querySelector('[data-delete-selected]');
+				const originalText = btn?.textContent || 'Eliminar seleccionados';
+				if (btn) {
+					btn.disabled = true;
+					btn.textContent = 'Eliminando…';
+				}
+				try {
+					const res = await fetch('/api/panel/delete-submissions', {
+						method: 'POST',
+						headers: { 'Content-Type': 'application/json' },
+						body: JSON.stringify({ ids }),
+					});
+					const data = await res.json().catch(() => ({}));
+					if (!res.ok) {
+						alert(data.error || 'Error al eliminar.');
+						if (btn) { btn.disabled = false; btn.textContent = originalText; }
+						return;
+					}
+					const deleted = data.deleted ?? 0;
+					if (data.errors?.length && deleted > 0) {
+						alert(`Se eliminaron ${deleted}. Algunos no se pudieron eliminar.`);
+					} else if (deleted === 0 && !data.success) {
+						alert(data.error || 'No se pudieron eliminar.');
+						if (btn) { btn.disabled = false; btn.textContent = originalText; }
+						return;
+					}
+					selectedIds.clear();
+					if (btn) btn.textContent = 'Listo, actualizando…';
+					setTimeout(() => window.location.reload(), 400);
+				} catch (err) {
+					alert('Error de conexión al eliminar.');
+					if (btn) { btn.disabled = false; btn.textContent = originalText; }
+				}
+			});
 		</script>
 	</body>
 </html>
