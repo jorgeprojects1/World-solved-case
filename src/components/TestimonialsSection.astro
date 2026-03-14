@@ -1,0 +1,239 @@
+---
+const testimonials = [
+	{
+		name: 'Carmen Valladares',
+		locationEs: 'Ciudad de México, México',
+		locationEn: 'Mexico City, Mexico',
+		caseEs: 'Recuperación de inversión',
+		caseEn: 'Investment recovery',
+		quoteEs: 'Perdí una suma importante en una plataforma de trading. World Solved Case llevó mi caso con total profesionalismo y en menos de un año recuperé más del 85% de lo invertido. Recomiendo su equipo sin dudarlo.',
+		quoteEn: 'I lost a significant amount on a trading platform. World Solved Case handled my case with full professionalism and in less than a year I recovered over 85% of what I invested. I recommend their team without hesitation.',
+		initials: 'CV',
+		stars: 5,
+		dateEs: 'Marzo 2024',
+		dateEn: 'March 2024',
+	},
+	{
+		name: 'James Morrison',
+		locationEs: 'Miami, Estados Unidos',
+		locationEn: 'Miami, United States',
+		caseEs: 'Aseguraciones monetarias',
+		caseEn: 'Monetary assurances',
+		quoteEs: 'Necesitábamos blindar garantías para un crédito internacional. El equipo entendió rápido la estructura y nos ayudó a cerrar con la contraparte en Europa. Servicio impecable y muy bien coordinado.',
+		quoteEn: 'We needed to secure guarantees for an international credit facility. The team quickly understood the structure and helped us close with the counterparty in Europe. Impeccable service and very well coordinated.',
+		initials: 'JM',
+		stars: 5,
+		dateEs: 'Junio 2024',
+		dateEn: 'June 2024',
+	},
+	{
+		name: 'Patricia Fernández',
+		locationEs: 'Madrid, España',
+		locationEn: 'Madrid, Spain',
+		caseEs: 'Recuperación monetaria',
+		caseEn: 'Monetary recovery',
+		quoteEs: 'Después de una estafa con seguros, no sabía por dónde empezar. World Solved Case me guió paso a paso y logramos un acuerdo que superó mis expectativas. Agradecida por su trato cercano y resultados.',
+		quoteEn: 'After an insurance scam, I didn\'t know where to start. World Solved Case guided me step by step and we reached a settlement that exceeded my expectations. Grateful for their personal approach and results.',
+		initials: 'PF',
+		stars: 5,
+		dateEs: 'Septiembre 2024',
+		dateEn: 'September 2024',
+	},
+	{
+		name: 'Ricardo Soto',
+		locationEs: 'Santiago, Chile',
+		locationEn: 'Santiago, Chile',
+		caseEs: 'Caso judicial binario',
+		caseEn: 'Binary legal case',
+		quoteEs: 'Tenía un conflicto con una entidad financiera en Latinoamérica. La firma tiene presencia y conocimiento en la región que hicieron la diferencia. Resolvieron mi caso de forma eficaz y transparente.',
+		quoteEn: 'I had a dispute with a financial entity in Latin America. The firm\'s presence and knowledge in the region made the difference. They resolved my case effectively and transparently.',
+		initials: 'RS',
+		stars: 5,
+		dateEs: 'Enero 2025',
+		dateEn: 'January 2025',
+	},
+];
+---
+
+<section
+	id="testimonios"
+	class="relative bg-white py-16 text-slate-900 sm:py-20 lg:py-24 section-animate-init"
+	data-animate-section
+>
+	<div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-sky-500/0 via-sky-500/60 to-sky-500/0"></div>
+
+	<div class="relative mx-auto max-w-4xl px-6 lg:px-8">
+		<div class="text-center">
+			<h2 class="text-2xl tracking-[0.2em] text-sky-500 sm:text-3xl">
+				<span class="lang-es">CASOS DE ÉXITO Y TESTIMONIOS</span>
+				<span class="lang-en">SUCCESS STORIES & TESTIMONIALS</span>
+			</h2>
+			<div class="mx-auto mt-3 h-0.5 w-24 bg-sky-500"></div>
+			<p class="mx-auto mt-6 max-w-2xl text-sm text-slate-600 sm:text-base">
+				<span class="lang-es">Lo que dicen quienes confiaron en nosotros para recuperar su patrimonio y resolver sus casos.</span>
+				<span class="lang-en">What those who trusted us to recover their assets and resolve their cases have to say.</span>
+			</p>
+		</div>
+
+		<div class="relative mt-12 lg:mt-16" data-testimonials-carousel>
+			<div class="overflow-hidden">
+				<div
+					class="flex min-h-[280px] w-[400%] transition-transform duration-500 ease-out sm:min-h-[260px] lg:w-[280%]"
+					data-testimonial-track
+				>
+					{testimonials.map((t, i) => (
+						<article
+							class="flex w-1/4 flex-shrink-0 px-2 lg:px-3"
+							data-testimonial-slide
+							data-index={i}
+							aria-hidden={i !== 0}
+						>
+							<div class="h-full w-full rounded-xl border border-slate-200 bg-slate-50 p-6 shadow-lg shadow-slate-900/5 sm:p-8">
+						<div class="flex items-center justify-between gap-4">
+							<div class="flex items-center gap-4">
+								<div
+									class="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-sky-500/90 text-lg font-semibold text-slate-950"
+									aria-hidden="true"
+								>
+									{t.initials}
+								</div>
+								<div>
+									<p class="font-semibold text-slate-900">{t.name}</p>
+									<p class="text-xs text-sky-600">
+										<span class="lang-es">{t.caseEs}</span>
+										<span class="lang-en">{t.caseEn}</span>
+									</p>
+									<p class="text-xs text-slate-600">
+										<span class="lang-es">{t.locationEs}</span>
+										<span class="lang-en">{t.locationEn}</span>
+									</p>
+								</div>
+							</div>
+							<div class="flex shrink-0 flex-col items-end gap-1">
+								<div class="flex gap-0.5 text-amber-500" aria-label="5 estrellas">
+									{Array.from({ length: t.stars }).map(() => (
+										<span aria-hidden="true">★</span>
+									))}
+								</div>
+								<p class="text-xs text-slate-600">
+									<span class="lang-es">{t.dateEs}</span>
+									<span class="lang-en">{t.dateEn}</span>
+								</p>
+							</div>
+						</div>
+						<blockquote class="mt-5 border-l-2 border-sky-500 pl-4 text-sm leading-relaxed text-slate-700 sm:text-base">
+							<span class="lang-es">«{t.quoteEs}»</span>
+							<span class="lang-en">"{t.quoteEn}"</span>
+						</blockquote>
+							</div>
+						</article>
+					))}
+				</div>
+			</div>
+
+			<!-- Botones prev/next -->
+			<button
+				type="button"
+				class="absolute left-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-700 shadow-md transition hover:border-sky-400 hover:bg-sky-50 hover:text-sky-700 -left-2 sm:-left-4"
+				data-testimonial-prev
+				aria-label="Testimonio anterior"
+			>
+				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+				</svg>
+			</button>
+			<button
+				type="button"
+				class="absolute right-0 top-1/2 z-10 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-full border border-slate-300 bg-white text-slate-700 shadow-md transition hover:border-sky-400 hover:bg-sky-50 hover:text-sky-700 -right-2 sm:-right-4"
+				data-testimonial-next
+				aria-label="Siguiente testimonio"
+			>
+				<svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+					<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+				</svg>
+			</button>
+
+			<!-- Dots -->
+			<div class="mt-8 flex justify-center gap-2" data-testimonial-dots role="tablist" aria-label="Elegir testimonio">
+				{testimonials.map((_, i) => (
+					<button
+						type="button"
+						class="h-2 w-2 rounded-full transition-colors sm:h-2.5 sm:w-2.5"
+						class:list={[i === 0 ? 'bg-sky-500' : 'bg-slate-300 hover:bg-slate-400']}
+						data-dot
+						data-index={i}
+						role="tab"
+						aria-selected={i === 0}
+						aria-label={`Testimonio ${i + 1}`}
+					/>
+				))}
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const carousel = document.querySelector('[data-testimonials-carousel]');
+		if (!carousel) return;
+
+		const track = carousel.querySelector('[data-testimonial-track]') as HTMLElement;
+		const slides = carousel.querySelectorAll('[data-testimonial-slide]');
+		const dots = carousel.querySelectorAll('[data-dot]');
+		const prevBtn = carousel.querySelector('[data-testimonial-prev]');
+		const nextBtn = carousel.querySelector('[data-testimonial-next]');
+		const total = slides.length;
+		if (total === 0 || !track) return;
+
+		let index = 0;
+		let autoplay: ReturnType<typeof setInterval> | null = null;
+		const lg = () => window.matchMedia('(min-width: 1024px)').matches;
+
+		const updateTransform = () => {
+			const isLg = lg();
+			const percent = isLg
+				? (index === 0 ? 0 : 5.36 - 25 * index)
+				: -index * 25;
+			track.style.transform = `translateX(${percent}%)`;
+		};
+
+		const goTo = (i: number) => {
+			index = (i + total) % total;
+			slides.forEach((el, j) => el.setAttribute('aria-hidden', String(j !== index)));
+			updateTransform();
+			dots.forEach((dot, j) => {
+				dot.setAttribute('aria-selected', String(j === index));
+				dot.classList.toggle('bg-sky-500', j === index);
+				dot.classList.toggle('bg-slate-300', j !== index);
+			});
+		};
+
+		const startAutoplay = () => {
+			autoplay = setInterval(() => goTo(index + 1), 6000);
+		};
+		const stopAutoplay = () => {
+			if (autoplay) clearInterval(autoplay);
+			autoplay = null;
+		};
+
+		prevBtn?.addEventListener('click', () => {
+			stopAutoplay();
+			goTo(index - 1);
+			startAutoplay();
+		});
+		nextBtn?.addEventListener('click', () => {
+			stopAutoplay();
+			goTo(index + 1);
+			startAutoplay();
+		});
+		dots.forEach((dot, i) => {
+			dot.addEventListener('click', () => {
+				stopAutoplay();
+				goTo(i);
+				startAutoplay();
+			});
+		});
+
+		startAutoplay();
+	});
+</script>

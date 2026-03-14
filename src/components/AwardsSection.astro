@@ -1,0 +1,94 @@
+---
+const images = [
+	'https://images.pexels.com/photos/3184418/pexels-photo-3184418.jpeg?auto=compress&cs=tinysrgb&w=800',
+	'https://images.pexels.com/photos/3183197/pexels-photo-3183197.jpeg?auto=compress&cs=tinysrgb&w=800',
+	'https://images.pexels.com/photos/3760083/pexels-photo-3760083.jpeg?auto=compress&cs=tinysrgb&w=800',
+	'https://images.pexels.com/photos/3184296/pexels-photo-3184296.jpeg?auto=compress&cs=tinysrgb&w=800',
+];
+---
+
+<section
+	class="relative bg-slate-50 py-16 text-slate-900 sm:py-20 lg:py-24 section-animate-init"
+	data-animate-section
+>
+	<div class="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-sky-500/0 via-sky-500/60 to-sky-500/0"></div>
+
+	<div class="relative mx-auto max-w-6xl px-6 lg:px-8">
+		<div class="flex flex-col gap-12 lg:flex-row lg:items-center lg:gap-16">
+			<!-- Imágenes con fade -->
+			<div class="w-full lg:w-[44%] lg:order-1">
+				<div class="relative aspect-[4/3] overflow-hidden rounded-xl border border-slate-200 bg-white shadow-xl shadow-slate-900/5" data-awards-container>
+					{images.map((src, i) => (
+						<div
+							class="absolute inset-0 z-0 transition-opacity duration-700 ease-in-out"
+							style={i === 0 ? 'opacity: 1' : 'opacity: 0'}
+							data-awards-slide
+							data-index={i}
+							aria-hidden={i !== 0}
+						>
+							<img
+								src={src}
+								alt=""
+								class="h-full w-full object-cover"
+								loading="lazy"
+								width={800}
+								height={600}
+							/>
+							<div class="absolute inset-0 bg-slate-900/10"></div>
+						</div>
+					))}
+				</div>
+			</div>
+
+			<!-- Texto -->
+			<div class="w-full lg:w-[56%] lg:order-2">
+				<h2 class="text-2xl tracking-[0.2em] text-sky-500 sm:text-3xl">
+					<span class="lang-es">RECONOCIDOS POR NUESTRO SERVICIO</span>
+					<span class="lang-en">RECOGNIZED FOR OUR SERVICE</span>
+				</h2>
+				<div class="mt-3 h-0.5 w-24 bg-sky-500"></div>
+
+				<div class="mt-6 flex items-start gap-2 text-4xl text-amber-400/90" aria-hidden="true">
+					<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+				</div>
+
+				<div class="mt-6 space-y-4 text-sm leading-relaxed text-slate-700 sm:text-base">
+					<p class="lang-es">
+						Somos una empresa cinco estrellas premiada en diferentes años por nuestro servicio por IRS y más entidades generativas. Somos eficaces en nuestros servicios. Gracias por creer en nosotros.
+					</p>
+					<p class="lang-en">
+						We are a five-star award-winning company in different years for our service by the IRS and other generative entities. We are effective in our services. Thank you for believing in us.
+					</p>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const container = document.querySelector('[data-awards-container]');
+		if (!container) return;
+
+		const slides = container.querySelectorAll('[data-awards-slide]');
+		const total = slides.length;
+		if (total === 0) return;
+
+		let index = 0;
+
+		const show = (i: number) => {
+			slides.forEach((el, j) => {
+				const isActive = j === i;
+				const htmlEl = el as HTMLElement;
+				htmlEl.style.opacity = isActive ? '1' : '0';
+				htmlEl.style.zIndex = isActive ? '10' : '0';
+				el.setAttribute('aria-hidden', String(!isActive));
+			});
+		};
+
+		const interval = setInterval(() => {
+			index = (index + 1) % total;
+			show(index);
+		}, 4500);
+	});
+</script>
