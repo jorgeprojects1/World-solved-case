@@ -15,6 +15,7 @@ const JOTFORM_FIELD_IDS: Record<string, string> = {
 	country: '3',
 	address: '4',
 	identificationNumber: '5',
+	platform: '16',
 	phone: '6',
 	email: '7',
 	city: '8',
@@ -73,6 +74,7 @@ function getFormValues(
 		country: (get('country') || '') as string,
 		address: (get('address') || '') as string,
 		identificationNumber: (get('identificationNumber') || '') as string,
+		platform: (get('platform') || '') as string,
 		phone: (get('phone') || '') as string,
 		email: (get('email') || '') as string,
 		city: (get('city') || '') as string,
@@ -115,6 +117,7 @@ export const POST: APIRoute = async ({ request }) => {
 		country,
 		address,
 		identificationNumber,
+		platform,
 		phone,
 		email,
 		city,
@@ -137,6 +140,7 @@ Country: ${country}
 City: ${city}
 Address: ${address}
 Identification number: ${identificationNumber}
+Platform: ${platform}
 
 Bank name: ${bankName}
 Account number: ${accountNumber}

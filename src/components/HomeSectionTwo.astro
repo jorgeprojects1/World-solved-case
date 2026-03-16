@@ -102,6 +102,38 @@ const practiceAreas = [
 			'https://images.pexels.com/photos/1181533/pexels-photo-1181533.jpeg?auto=compress&cs=tinysrgb&w=1600',
 		],
 	},
+	{
+		es: 'Ayares – Servicio de Impuestos Internos (IRS)',
+		en: 'Ayares – Internal Revenue Service (IRS)',
+		descEs:
+			'Ayares es nuestro servicio especializado en temas vinculados al Servicio de Impuestos Internos (IRS) de los Estados Unidos. Asesoramos a contribuyentes y empresas que tienen obligaciones fiscales en EE. UU., ayudándoles a entender y cumplir con sus responsabilidades tributarias según la ley de impuestos federal.',
+		descEn:
+			'Ayares is our specialized service focused on matters related to the United States Internal Revenue Service (IRS). We advise taxpayers and businesses with U.S. tax obligations, helping them understand and comply with their federal tax responsibilities.',
+		desc2Es:
+			'Analizamos notificaciones del IRS, diseñamos respuestas formales, acompañamos procesos de auditoría y resoluciones de deudas tributarias, siempre buscando reducir sanciones y evitar conflictos mayores. Nuestro objetivo es traducir el lenguaje técnico del IRS a decisiones claras y accionables para ti.',
+		desc2En:
+			'We review IRS notices, draft formal responses, support audit processes, and handle tax debt resolutions while aiming to reduce penalties and avoid larger disputes. Our goal is to translate the IRS technical language into clear, actionable decisions for you.',
+		imgs: [
+			'/images/ayares1.jpg',
+			'/images/ayares2.jfif',
+		],
+	},
+	{
+		es: 'Departamento del Tesoro de EE. UU.',
+		en: 'U.S. Department of the Treasury',
+		descEs:
+			'Servicio de información y acompañamiento sobre el Departamento del Tesoro de los Estados Unidos, entidad encargada de la tesorería nacional, la gestión de la deuda pública y la recaudación de impuestos federales a través del Servicio de Impuestos Internos. Explicamos su estructura, funciones y cómo impacta en personas y empresas con vínculos financieros en EE. UU.',
+		descEn:
+			'Information and guidance service focused on the United States Department of the Treasury, the federal agency responsible for national treasury, public debt management, and federal tax collection through the Internal Revenue Service. We explain its structure, functions, and how it affects individuals and businesses with financial ties to the U.S.',
+		desc2Es:
+			'Te ayudamos a entender conceptos como deuda soberana, emisiones de bonos del Tesoro, sanciones financieras y regulaciones del sistema bancario estadounidense, para que puedas tomar decisiones informadas en inversiones, cumplimiento fiscal y planificación patrimonial internacional.',
+		desc2En:
+			'We help you understand concepts such as sovereign debt, Treasury securities, financial sanctions, and U.S. banking regulations, so you can make informed decisions about investments, tax compliance, and international estate planning.',
+		imgs: [
+			'/images/tesoreria1.jfif',
+			'/images/tesoro.jpg',
+		],
+	},
 ];
 ---
 
@@ -198,6 +230,22 @@ const practiceAreas = [
 									/>
 								</svg>
 							)}
+							{index === 6 && (
+								<svg viewBox="0 0 24 24" class="h-5 w-5">
+									<path
+										fill="currentColor"
+										d="M4 4h16v2H4V4Zm2 4h12v2H6V8Zm-2 4h16v2H4v-2Zm2 4h12v2H6v-2Z"
+									/>
+								</svg>
+							)}
+							{index === 7 && (
+								<svg viewBox="0 0 24 24" class="h-5 w-5">
+									<path
+										fill="currentColor"
+										d="M4 5h16v2H4V5Zm1 4h14v10H5V9Zm4 2v2h6v-2H9Zm0 4v2h4v-2H9Z"
+									/>
+								</svg>
+							)}
 						</div>
 						<p class="mb-0 text-sm font-medium leading-snug text-slate-50">
 							<span class="lang-es">{area.es}</span>
@@ -216,7 +264,7 @@ const practiceAreas = [
 	>
 		<div class="absolute inset-0" data-area-backdrop></div>
 
-		<div class="relative z-10 w-full max-w-3xl rounded-xl border border-slate-700/80 bg-slate-900/95 shadow-2xl shadow-black/70 backdrop-blur-md">
+		<div class="relative z-10 w-full max-w-5xl rounded-xl border border-slate-700/80 bg-slate-900/95 shadow-2xl shadow-black/70 backdrop-blur-md">
 			<button
 				type="button"
 				class="absolute cursor-pointer right-3 top-3 inline-flex h-8 w-8 items-center justify-center rounded-full border border-slate-600/70 bg-slate-900/70 text-slate-300 text-sm hover:border-sky-400 hover:text-white"
@@ -227,6 +275,15 @@ const practiceAreas = [
 			</button>
 
 			<div class="grid gap-6 p-5 sm:p-7 lg:grid-cols-[1.1fr_minmax(0,1fr)] lg:gap-8">
+				<div class="overflow-hidden rounded-lg border border-slate-700/70 bg-slate-950/60">
+					<img
+						src=""
+						alt=""
+						class="h-full w-full object-cover opacity-100 transition-opacity duration-700 ease-out sm:h-full"
+						loading="lazy"
+						data-modal-img
+					/>
+				</div>
 				<div class="space-y-4">
 					<h3 class="text-lg font-semibold tracking-[0.18em] text-sky-400 sm:text-xl">
 						<span class="lang-es" data-modal-title-es></span>
@@ -258,15 +315,7 @@ const practiceAreas = [
 					</div>
 				</div>
 
-				<div class="overflow-hidden rounded-lg border border-slate-700/70 bg-slate-950/60">
-					<img
-						src=""
-						alt=""
-						class="h-56 w-full object-cover opacity-100 transition-opacity duration-700 ease-out sm:h-64"
-						loading="lazy"
-						data-modal-img
-					/>
-				</div>
+			
 			</div>
 		</div>
 	</div>
