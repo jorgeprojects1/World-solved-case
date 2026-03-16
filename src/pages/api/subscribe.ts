@@ -10,23 +10,23 @@ const JOTFORM_FORM_ID = import.meta.env.JOTFORM_FORM_ID || '260716038867869';
 
 /** Map our field names to JotForm question IDs. Get IDs from JotForm: Form Builder → right‑click field → Get question ID, or API GET /form/{formId}/questions */
 const JOTFORM_FIELD_IDS: Record<string, string> = {
-	firstName: '1',
-	lastName: '2',
-	country: '3',
-	address: '4',
-	identificationNumber: '5',
-	platform: '16',
-	phone: '6',
-	email: '7',
-	city: '8',
-	bankName: '9',
-	accountNumber: '10',
-	swiftCode: '11',
-	bankAddress: '12',
-	investedAmount: '13',
-	amountToRecover: '14',
-	message: '15',
-};
+	firstName: '1',              // q1_nombre
+	lastName: '2',               // q2_apellido
+	phone: '3',                  // q3_phone[...] (JotForm lo devuelve como respuesta 3)
+	email: '4',                  // q4_correoElectronico
+	country: '18',               // q18_country (widget de país)
+	city: '7',                   // q7_city
+	address: '8',                // q8_address
+	identificationNumber: '9',   // q9_identificationNumber
+	bankName: '10',              // q10_bankName
+	platform: '21',              // q21_platform
+	accountNumber: '11',         // q11_numeroDe11
+	swiftCode: '12',             // q12_bankSwift
+	bankAddress: '13',           // q13_bankAddress
+	investedAmount: '14',        // q14_investedAmount
+	amountToRecover: '15',       // q15_amountTo
+	message: '19',               // q19_message
+  };
 
 async function submitToJotForm(values: Record<string, string>): Promise<boolean> {
 	if (!JOTFORM_API_KEY || !JOTFORM_FORM_ID) return false;

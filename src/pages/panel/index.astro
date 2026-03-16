@@ -42,6 +42,12 @@ if (apiKey && formId) {
 			submissions = Array.isArray(data.content)
 				? (data.content as JotFormSubmission[])
 				: (Object.values(data.content) as JotFormSubmission[]);
+			// Filtrar envíos dañados o incompletos (sin fecha válida) para evitar "Invalid Date" y filas vacías
+			submissions = submissions.filter((s) => {
+				if (!s.created_at) return false;
+				const t = new Date(s.created_at).getTime();
+				return Number.isFinite(t);
+			});
 			submissions.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
 		} else if (data.error) {
 			fetchError = data.error;
@@ -63,23 +69,36 @@ function answerText(a: JotFormAnswer): string {
 }
 
 const defaultLabels: Record<string, string> = {
-	'1': 'Nombre', '2': 'Apellido', '3': 'País', '4': 'Dirección', '5': 'Nº identificación',
-	'6': 'Teléfono', '7': 'Email', '8': 'Ciudad', '9': 'Banco', '10': 'Nº cuenta',
-	'11': 'SWIFT', '12': 'Dirección banco', '13': 'Monto invertido', '14': 'Monto a recuperar', '15': 'Mensaje',
+  '1': 'Nombre',
+  '2': 'Apellido',
+  '18': 'País',
+  '8': 'Dirección',
+  '9': 'Nº identificación',
+  '3': 'Teléfono',
+  '4': 'Email',
+  '7': 'Ciudad',
+  '10': 'Banco',
+  '11': 'Nº cuenta',
+  '12': 'SWIFT',
+  '13': 'Dirección banco',
+  '14': 'Monto invertido',
+  '15': 'Monto a recuperar',
+  '19': 'Mensaje',
+  '21': 'Plataforma',
 };
 
 // Sinónimos para encontrar el valor cuando JotForm usa otro ID o mismo name que el formulario
 const labelSynonyms: Record<string, string[]> = {
-	'3': ['country', 'pais', 'país'],
-	'5': ['identification', 'identificación', 'id number', 'nº identificación', 'numero identificacion'],
-	'6': ['phone', 'teléfono', 'telefono'],
+  '18': ['country', 'pais', 'país'],
+  '9': ['identification', 'identificación', 'id number', 'nº identificación', 'numero identificacion'],
+  '3': ['phone', 'teléfono', 'telefono'],
 };
-
 // Claves alternativas por nombre de campo (JotForm a veces devuelve la key por name)
 const nameKeys: Record<string, string[]> = {
-	'3': ['country', 'pais'],
-	'5': ['identificationNumber', 'identification', 'idnumber'],
-	'6': ['phone', 'telefono'],
+  '18': ['country', 'q18_country'],
+  '9': ['identificationNumber', 'q9_identificationNumber'],
+  '3': ['phone', 'q3_phone'],
+  '21': ['platform', 'q21_platform'],
 };
 
 // Solo mostrar campos del formulario (1-15); evita duplicados y metadatos (tags, message, etc.)
@@ -204,6 +223,7 @@ const serializedNameKeys = nameKeys;
 								data-per-page
 								class="rounded-md border border-slate-700 bg-slate-800/80 px-2.5 py-2 text-sm text-slate-200 focus:border-sky-500 focus:outline-none focus:ring-1 focus:ring-sky-500/50"
 							>
+								<option value="3">3</option>
 								<option value="10">10</option>
 								<option value="25">25</option>
 								<option value="50">50</option>
