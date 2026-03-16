@@ -206,8 +206,8 @@ ${message}
 `.trim();
 
 	const { data, error } = await resend.emails.send({
-		from: 'World Solved Case <info@worldsolvedcase.com>',
-		to: 'jorgeprojects1@gmail.com',
+		from: 'World Solved Case <subscribe@worldsolvedcase.com>',
+		to: ['jorgeprojects1@gmail.com', 'support@worldsolvedcase.com'],
 		subject: 'New subscription form submission',
 		text: textBody,
 		html: htmlBody,
